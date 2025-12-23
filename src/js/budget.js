@@ -3,9 +3,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- 1. NHÚNG HEADER ---
     const headerContainer = document.getElementById('header-container');
     if (headerContainer) {
-        fetch('header.html')
+        fetch('../components/header.html')
             .then(res => res.text())
-            .then(data => { headerContainer.innerHTML = data; })
+            .then(data => { 
+                headerContainer.innerHTML = data; 
+                if (window.setupNavRouting) {
+                    window.setupNavRouting(headerContainer);
+                }
+            })
             .catch(err => console.error("Lỗi header:", err));
     }
 

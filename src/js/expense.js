@@ -14,22 +14,21 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(data => {
                 headerContainer.innerHTML = data;
+                if (window.setupNavRouting) {
+                    window.setupNavRouting(headerContainer);
+                }
+                if (window.highlightActiveNav) {
+                    window.highlightActiveNav(headerContainer);
+                }
                 highlightExpenseMenu();
             })
             .catch(err => console.error("Lỗi:", err));
     }
 
     function highlightExpenseMenu() {
-        const links = document.querySelectorAll('nav a');
-        links.forEach(link => {
-            link.className = "nav-link flex items-center gap-2 px-4 py-2 rounded-lg text-text-secondary hover:bg-background-main hover:text-primary transition-all font-bold text-sm";
-            // Tìm chữ "Giao dịch" để active
-            if (link.innerText.trim().includes("Giao dịch")) {
-                link.className = "nav-link flex items-center gap-2 px-4 py-2 rounded-lg bg-green-50 text-primary font-bold text-sm transition-all shadow-sm shadow-green-100";
-                const icon = link.querySelector('.material-symbols-outlined');
-                if(icon) icon.classList.add('fill-1');
-            }
-        });
+        if (window.highlightActiveNav) {
+            window.highlightActiveNav(document);
+        }
     }
 
     // ==========================================

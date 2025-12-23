@@ -5,5 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.text())
     .then(html => {
       header.innerHTML = html;
+      if (window.setupNavRouting) {
+        window.setupNavRouting(header);
+      }
+      if (window.highlightActiveNav) {
+        window.highlightActiveNav(header);
+      }
     });
 });
