@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Quản lý chi tiêu - Money Keeper</title>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link rel="stylesheet" href="../../src/css/style.css">
+    <script src="../../src/js/config.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { display: ['Manrope', 'sans-serif'] },
+                    colors: {
+                        emerald: { 500: '#10B981', 600: '#059669' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#F3F4F6] text-gray-900 font-display overflow-hidden">
+
+    <div id="header-container" class="fixed top-0 w-full z-50"></div>
+
+    <div class="flex h-screen w-full overflow-hidden pt-16">
+        <main class="flex-1 flex flex-col h-full overflow-y-auto bg-[#F3F4F6] p-4 sm:p-8">
+            
+            <div class="mx-auto max-w-7xl w-full flex flex-col gap-6 pb-20">
+                
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Quản lý chi tiêu</h1>
+                        <p class="text-sm text-gray-500 mt-1">Theo dõi chi tiết chi tiêu của bạn</p>
+                    </div>
+                    </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Tổng thu nhập</p>
+                            <div class="p-2 rounded-lg bg-green-50 text-green-500">
+                                <span class="material-symbols-outlined text-[22px]">trending_up</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">25.000.000 ₫</h3>
+                        <div class="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-xs font-bold text-green-600">
+                            +5% <span class="text-gray-400 font-medium ml-1">vs tháng trước</span>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Tổng chi tiêu</p>
+                            <div class="p-2 rounded-lg bg-red-50 text-red-500">
+                                <span class="material-symbols-outlined text-[22px]">trending_down</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">12.500.000 ₫</h3>
+                        <div class="inline-flex items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-xs font-bold text-red-500">
+                            -2% <span class="text-gray-400 font-medium ml-1">vs tháng trước</span>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl bg-white p-5 shadow-sm border border-gray-100">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Số dư hiện tại</p>
+                            <div class="p-2 rounded-lg bg-blue-50 text-blue-500">
+                                <span class="material-symbols-outlined text-[22px]">account_balance_wallet</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">12.500.000 ₫</h3>
+                        <div class="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-xs font-bold text-green-600">
+                            +10% <span class="text-gray-400 font-medium ml-1">tích lũy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-white shadow-sm border border-gray-100">
+                    
+                    <div class="p-5 flex flex-col lg:flex-row gap-4 justify-between border-b border-gray-100">
+                        
+                        <div class="relative w-full lg:w-96">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-gray-400 text-[20px]">search</span>
+                            </div>
+                            <input id="searchInput" type="text" class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:ring-0 text-sm font-medium transition-colors hover:bg-gray-100" placeholder="Tìm kiếm mô tả, số tiền...">
+                        </div>
+
+                        <div class="flex flex-wrap gap-3">
+                            
+                            <div class="relative">
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                    <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                                </div>
+                                <select class="appearance-none bg-gray-50 hover:bg-gray-100 border border-transparent hover:border-gray-200 text-gray-600 text-sm font-medium rounded-lg block pl-10 pr-8 py-2.5 focus:outline-none cursor-pointer">
+                                    <option value="10-2023">Tháng 10/2025</option>
+                                    <option value="09-2023">Tháng 09/2025</option>
+                                    <option value="08-2023">Tháng 08/2025</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                                </div>
+                            </div>
+
+                            <div class="relative">
+                                <select id="categoryFilter" class="appearance-none bg-gray-50 hover:bg-gray-100 border border-transparent hover:border-gray-200 text-gray-600 text-sm font-medium rounded-lg block w-full pl-3 pr-8 py-2.5 focus:outline-none cursor-pointer">
+                                    <option value="">Tất cả danh mục</option>
+                                    <optgroup label="--- Chi Tiêu ---">
+                                        <option value="an-uong">🍔 Ăn uống</option>
+                                        <option value="di-chuyen">🛵 Di chuyển</option>
+                                        <option value="mua-sam">🛍️ Mua sắm</option>
+                                        <option value="hoa-don">🧾 Hóa đơn</option>
+                                    </optgroup>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                    <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                                </div>
+                            </div>
+
+                            </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr>
+                                    <th class="p-5 w-12 text-center">
+                                        <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-[#10B981] focus:ring-[#10B981] cursor-pointer">
+                                    </th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Ngày</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Mô tả</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Danh mục</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Số tiền</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">Loại</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionTableBody" class="divide-y divide-gray-50">
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <div class="p-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <p class="text-xs font-medium text-gray-500">Hiển thị <span class="font-bold text-gray-900">1</span> đến <span class="font-bold text-gray-900">5</span> trong số <span class="font-bold text-gray-900">128</span> giao dịch</p>
+                        <div class="flex items-center gap-1">
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 text-xs transition-colors"><span class="material-symbols-outlined text-[16px]">chevron_left</span></button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded bg-[#10B981] text-white font-bold text-xs shadow-sm shadow-emerald-200">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 font-bold text-xs transition-colors">2</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 text-xs transition-colors"><span class="material-symbols-outlined text-[16px]">chevron_right</span></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../src/js/expense.js"></script>
+</body>
+</html>

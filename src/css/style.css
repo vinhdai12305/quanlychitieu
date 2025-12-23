@@ -1,3 +1,62 @@
+/* File: src/css/income.css */
+
+/* ================================================= */
+/* 1. FIX LỖI 2 MŨI TÊN TRONG Ô SELECT (QUAN TRỌNG) */
+/* ================================================= */
+select {
+    -webkit-appearance: none; /* Chrome, Safari, Opera */
+    -moz-appearance: none;    /* Firefox */
+    appearance: none;         /* Chuẩn chung */
+    background-image: none;   /* Đảm bảo không có hình nền lạ */
+}
+
+/* Fix cho trình duyệt IE/Edge cũ */
+select::-ms-expand {
+    display: none;
+}
+
+/* ================================================= */
+/* 2. CÁC HIỆU ỨNG CŨ (GIỮ NGUYÊN)                   */
+/* ================================================= */
+
+/* Hiệu ứng hover nhẹ cho các card thống kê */
+.card-hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+}
+
+/* Tùy chỉnh thanh cuộn cho bảng (nếu dữ liệu quá dài) */
+.overflow-x-auto::-webkit-scrollbar {
+    height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Hiệu ứng khi thêm dòng mới vào bảng */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.new-row {
+    animation: fadeIn 0.4s ease-out forwards;
+}
 /* 1. Import Font Chữ */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
