@@ -1,90 +1,62 @@
-/**
- * @typedef {Object} Transaction
- * @property {string} id
- * @property {"income" | "expense"} type
- * @property {string} category
- * @property {number} amount
- * @property {string} date // YYYY-MM-DD
- * @property {string} note
- */
+// src/services/transactionAnalytics.service.js
 
-/**
- * TỔNG CHI THEO DANH MỤC (Pie Chart)
-@param {Transaction[]} transactions
-@returns {Object<string, number>}
- */
-export function getExpenseByCategory(transactions = []) {
-    return transactions
-      .filter(t => t.type === "expense")
-      .reduce((result, tx) => {
-        const category = tx.category || "Khác";
-        result[category] = (result[category] || 0) + tx.amount;
-        return result;
-      }, {});
-  }
-  
-  /**
-   * TỔNG THU / CHI (Bar Chart)
-   * @param {Transaction[]} transactions
-   * @returns {{ income: number, expense: number }}
-   */
-  export function getIncomeExpenseTotal(transactions = []) {
-    return transactions.reduce(
-      (total, tx) => {
-        if (tx.type === "income") total.income += tx.amount;
-        if (tx.type === "expense") total.expense += tx.amount;
-        return total;
-      },
-      { income: 0, expense: 0 }
-    );
-  }
-  
-  /**
+// 1. Import hàm lấy dữ liệu từ Firebase
+import { getAllTransactions } from "../firebase/firestore.service.js";
 
-   * LỌC THEO THÁNG
-@param {Transaction[]} transactions
-@param {number} year  (VD: 2025)
-@param {number} month (1-12)
-@returns {Transaction[]}
-   */
-  export function filterByMonth(transactions = [], year, month) {
-    return transactions.filter(tx => {
-      if (!tx.date) return false;
-  
-      const [y, m] = tx.date.split("-").map(Number);
-      return y === year && m === month;
-    });
-  }
-  
-  /**
-   * ==============================
-   * DÒNG TIỀN THEO TUẦN (Weekly Cashflow)
-   * ==============================
-   * @param {Transaction[]} transactions
-   * @returns {{ labels: string[], income: number[], expense: number[] }}
-   */
-  export function getWeeklyCashflow(transactions = []) {
-    const weeks = {};
-  
-    transactions.forEach(tx => {
-      if (!tx.date) return;
-  
-      const date = new Date(tx.date);
-      const week = Math.ceil(date.getDate() / 7);
-      const key = `Tuần ${week}`;
-  
-      if (!weeks[key]) {
-        weeks[key] = { income: 0, expense: 0 };
-      }
-  
-      weeks[key][tx.type] += tx.amount;
-    });
-  
-    const labels = Object.keys(weeks).sort();
-    return {
-      labels,
-      income: labels.map(l => weeks[l].income),
-      expense: labels.map(l => weeks[l].expense)
-    };
-  }
-  
+// 2. Import các công thức tính toán từ file utils
+import { 
+    filterByMonth, 
+    getIncomeExpenseTotal, 
+    getExpenseByCategory, 
+    getWeeklyCashflow 
+} from "../utils/analytics.js"; 
+
+export class TransactionAnalyticsService {
+    
+    /**
+     * Lấy toàn bộ số liệu cần thiết để vẽ lên Dashboard cho một tháng cụ thể
+     * @param {number} month - Tháng cần xem (1-12)
+     * @param {number} year - Năm cần xem (ví dụ: 2024)
+     */
+    async getDashboardStats(month, year) {
+        // Bước 1: Lấy toàn bộ giao dịch từ Database
+        // (Lưu ý: Dữ liệu này đã được adapter chuyển đổi sang format chuẩn)
+        const allTransactions = await getAllTransactions();
+
+        // Bước 2: Lọc lấy dữ liệu của tháng đang chọn
+        const monthTransactions = filterByMonth(allTransactions, year, month);
+
+        // Bước 3: Tính toán cho 3 thẻ thống kê (Tổng quan)
+        const totals = getIncomeExpenseTotal(monthTransactions);
+        const balance = totals.income - totals.expense;
+
+        // Bước 4: Tính toán cho biểu đồ cột "Dòng tiền" (Weekly Cashflow)
+        const weeklyStats = getWeeklyCashflow(monthTransactions);
+
+        // Bước 5: Tính toán cho biểu đồ tròn "Phân loại chi tiêu"
+        const categoryStats = getExpenseByCategory(monthTransactions);
+
+        // Bước 6: Lấy danh sách "Giao dịch gần đây" (5 cái mới nhất)
+        // Sort: Mới nhất lên đầu -> Cắt lấy 5 cái
+        const recentTransactions = [...monthTransactions]
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 5);
+
+        // Bước 7: Trả về Object khớp với cấu trúc UI Dashboard
+        return {
+            // Dữ liệu cho 3 thẻ trên cùng
+            summary: {
+                totalIncome: totals.income,
+                totalExpense: totals.expense,
+                currentBalance: balance
+            },
+            // Dữ liệu cho 2 biểu đồ
+            charts: {
+                cashflow: weeklyStats,      // Dùng vẽ biểu đồ cột (Bar Chart)
+                spending: categoryStats     // Dùng vẽ biểu đồ tròn (Pie Chart)
+            },
+            // Dữ liệu cho danh sách bên dưới
+            recentList: recentTransactions
+        };
+    }
+}

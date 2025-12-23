@@ -1,85 +1,117 @@
-<header class="sticky top-0 z-50 bg-white border-b border-gray-200">
-    <div class="w-full px-4">
-    <div class="h-14 flex items-center justify-between">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Money Keeper - Dashboard</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-      <!-- LEFT: Logo -->
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-full bg-emerald-500 flex items-center justify-center">
-    <span class="text-white font-bold text-lg">₫</span>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#F3F4F6] text-gray-800 min-h-screen">
+
+  <div id="header-container" class="sticky top-0 z-50">
+    <nav class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 font-bold text-xl text-gray-800">
+            <span class="bg-gray-900 text-white p-1 rounded">MK</span> Money Keeper
+        </div>
+        <button class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm flex items-center gap-2">
+            + Thêm mới
+        </button>
+    </nav>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+
+    <div class="flex justify-between items-end">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Tổng quan</h1>
+      </div>
+      <div class="bg-white border px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 cursor-pointer hover:border-gray-400">
+        Tháng này ▼
+      </div>
     </div>
 
-        <span class="text-lg font-semibold text-gray-900">
-          Money Keeper
-        </span>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100">
+        <p class="text-sm font-medium text-gray-500 mb-2">Tổng thu nhập</p>
+        <h2 id="summary-income" class="text-3xl font-bold text-gray-900">0 ₫</h2>
+        <span class="inline-block mt-2 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">+ Thu vào</span>
       </div>
 
-      <!-- CENTER: Navigation -->
-      <nav class="hidden md:flex items-center gap-1 text-sm font-medium">
+      <div class="bg-white p-6 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100">
+        <p class="text-sm font-medium text-gray-500 mb-2">Tổng chi tiêu</p>
+        <h2 id="summary-expense" class="text-3xl font-bold text-gray-900">0 ₫</h2>
+         <span class="inline-block mt-2 text-xs font-medium text-rose-600 bg-rose-50 px-2 py-0.5 rounded">- Chi ra</span>
+      </div>
 
-        <a href="#"
-           class="px-4 py-2 rounded-lg
-                  bg-emerald-50 text-emerald-600 font-semibold">
-          Tổng quan
-        </a>
+      <div class="bg-white p-6 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100">
+        <p class="text-sm font-medium text-gray-500 mb-2">Số dư hiện tại</p>
+        <h2 id="summary-balance" class="text-3xl font-bold text-gray-900">0 ₫</h2>
+        <span class="inline-block mt-2 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Khả dụng</span>
+      </div>
+    </div>
 
-        <a href="#"
-           class="px-4 py-2 rounded-lg text-gray-500
-                  hover:text-gray-900 hover:bg-gray-100">
-          Chi tiêu
-        </a>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-bold text-lg text-gray-800">Dòng tiền</h3>
+            <div class="flex gap-4 text-xs font-medium">
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Thu nhập</div>
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span> Chi tiêu</div>
+            </div>
+        </div>
+        <div class="h-80 w-full">
+          <canvas id="cashflowWeeklyChart"></canvas>
+        </div>
+      </div>
 
-        <a href="#"
-           class="px-4 py-2 rounded-lg text-gray-500
-                  hover:text-gray-900 hover:bg-gray-100">
-          Thu nhập
-        </a>
-
-        <a href="#"
-           class="px-4 py-2 rounded-lg text-gray-500
-                  hover:text-gray-900 hover:bg-gray-100">
-          Ngân sách
-        </a>
-
-        <a href="#"
-           class="px-4 py-2 rounded-lg text-gray-500
-                  hover:text-gray-900 hover:bg-gray-100">
-          Báo cáo
-        </a>
-
-        <a href="#"
-           class="px-4 py-2 rounded-lg text-gray-500
-                  hover:text-gray-900 hover:bg-gray-100">
-          Cài đặt
-        </a>
-
-      </nav>
-
-      <!-- RIGHT -->
-      <div class="flex items-center gap-4">
-
-        <button
-          class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600
-                 text-white px-4 py-2 rounded-lg text-sm font-semibold
-                 shadow-sm transition active:scale-95">
-          + Thêm mới
-        </button>
-
-        <div class="flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div class="text-right leading-tight hidden sm:block">
-            <p class="text-sm font-semibold text-gray-900">
-              Nguyễn Văn A
-            </p>
-            <p class="text-xs text-gray-500">
-              Premium Plan
-            </p>
+      <div class="bg-white p-6 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100 flex flex-col">
+        <h3 class="font-bold text-lg text-gray-800 mb-6">Phân loại chi tiêu</h3>
+        
+        <div class="relative h-64 w-full flex justify-center items-center mb-6">
+          <canvas id="expensePieChart"></canvas>
+          <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+             <span class="text-xs text-gray-400 font-medium">TỔNG CHI</span>
+             <span id="pie-total-label" class="text-xl font-bold text-gray-800">0đ</span>
           </div>
-          <img
-            src="https://i.pinimg.com/736x/43/0f/07/430f07ae232540762bb76d3da5e7e5e6.jpg"
-            class="w-9 h-9 rounded-full border"
-            alt="User avatar">
         </div>
 
+        <div id="category-legend" class="space-y-4 flex-1 overflow-y-auto max-h-60 pr-2">
+            <div class="text-center text-sm text-gray-400 italic">Đang tải...</div>
+        </div>
       </div>
     </div>
-  </div>
-</header>
+
+    <div class="bg-white rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-bold text-lg text-gray-800">Giao dịch gần đây</h3>
+            <a href="#" class="text-sm text-emerald-600 font-medium hover:underline">Xem tất cả</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50 text-gray-500 font-medium">
+                    <tr>
+                        <th class="px-6 py-4">Giao dịch</th>
+                        <th class="px-6 py-4">Ghi chú</th>
+                        <th class="px-6 py-4">Ngày</th>
+                        <th class="px-6 py-4 text-right">Số tiền</th>
+                    </tr>
+                </thead>
+                <tbody id="transaction-list-body" class="divide-y divide-gray-100">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+  </main>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
