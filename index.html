@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Money Keeper – Quản lý chi tiêu cá nhân</title>
+
+  <!-- BASIC META -->
+  <meta name="description" content="Money Keeper là ứng dụng web giúp quản lý thu nhập, chi tiêu, ngân sách và theo dõi tài chính cá nhân." />
+  <meta name="keywords" content="money keeper, quản lý chi tiêu, personal finance, budget tracker" />
+  <meta name="author" content="Money Keeper Project" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- OPEN GRAPH (Facebook, Zalo, Messenger) -->
+  <meta property="og:title" content="Money Keeper – Quản lý chi tiêu cá nhân" />
+  <meta property="og:description" content="Theo dõi thu nhập, chi tiêu, ngân sách và báo cáo tài chính cá nhân trực quan." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vinhdai12305.github.io/quanlychitieu/" />
+  <meta property="og:image" content="https://vinhdai12305.github.io/quanlychitieu/og-image.png" />
+
+  <!-- TWITTER -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Money Keeper – Quản lý chi tiêu cá nhân" />
+  <meta name="twitter:description" content="Ứng dụng web quản lý tài chính cá nhân." />
+  <meta name="twitter:image" content="https://vinhdai12305.github.io/quanlychitieu/og-image.png" />
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- HEADER -->
+  <div id="header-container"></div>
+
+  <!-- DASHBOARD -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- TITLE -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+      <h1 class="text-3xl font-bold text-gray-900">Tổng quan</h1>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border">
+        <p class="text-sm text-gray-500 mb-2">Tổng thu nhập</p>
+        <h2 class="text-3xl font-bold">50.000.000 ₫</h2>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-sm border">
+        <p class="text-sm text-gray-500 mb-2">Tổng chi tiêu</p>
+        <h2 class="text-3xl font-bold">15.000.000 ₫</h2>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-sm border">
+        <p class="text-sm text-gray-500 mb-2">Số dư hiện tại</p>
+        <h2 class="text-3xl font-bold">35.000.000 ₫</h2>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+      <!-- BAR CHART -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border lg:col-span-2 h-[420px] flex flex-col">
+        <h3 class="font-bold text-lg mb-4">Dòng tiền</h3>
+        <div class="flex-1">
+          <canvas id="cashFlowChart"></canvas>
+        </div>
+      </div>
+
+      <!-- EXPENSE CATEGORY -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border h-[420px] flex flex-col">
+        <h3 class="font-bold text-lg mb-4">Phân loại chi tiêu</h3>
+
+        <div class="relative flex-1 flex items-center justify-center">
+          <canvas id="expenseChart"></canvas>
+          <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span class="text-xs text-gray-400">TỔNG CHI</span>
+            <span id="totalExpenseText" class="text-xl font-bold">0 ₫</span>
+          </div>
+        </div>
+
+        <div class="mt-6 space-y-4 text-sm">
+          <div class="flex justify-between">
+            <span>Ăn uống</span>
+            <span><span id="eatAmount">0 ₫</span> • <span id="eatPercent">0%</span></span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Di chuyển</span>
+            <span><span id="moveAmount">0 ₫</span> • <span id="movePercent">0%</span></span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Mua sắm</span>
+            <span><span id="shopAmount">0 ₫</span> • <span id="shopPercent">0%</span></span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Hóa đơn</span>
+            <span><span id="billAmount">0 ₫</span> • <span id="billPercent">0%</span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="src/js/main.js"></script>
+</body>
+</html>

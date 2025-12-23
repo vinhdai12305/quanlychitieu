@@ -1,0 +1,26 @@
+/* Tùy chỉnh icon Material Symbols */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Khi menu được chọn (active) thì icon đậm lên */
+.nav-active .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+    table tbody tr:hover {
+    background-color: #f9fafb;
+    }
+}
+/* Tùy chỉnh thanh cuộn cho bảng nếu dữ liệu dài */
+.overflow-x-auto::-webkit-scrollbar {
+    height: 6px;
+}
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #d1d5db; 
+    border-radius: 10px;
+}
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af; 
+}
