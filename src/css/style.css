@@ -1,7 +1,17 @@
-/* File: src/css/income.css */
+/* ================================================= */
+/* 1. IMPORT FONT & GLOBAL SETTINGS                  */
+/* ================================================= */
+/* Import font phải luôn nằm ở dòng đầu tiên của file CSS */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+body {
+    font-family: 'Manrope', sans-serif;
+    background-color: #f8f9fa; /* Màu nền xám nhạt hiện đại */
+    color: #111827;
+}
 
 /* ================================================= */
-/* 1. FIX LỖI 2 MŨI TÊN TRONG Ô SELECT (QUAN TRỌNG) */
+/* 2. FIX LỖI 2 MŨI TÊN TRONG Ô SELECT (QUAN TRỌNG) */
 /* ================================================= */
 select {
     -webkit-appearance: none; /* Chrome, Safari, Opera */
@@ -16,7 +26,48 @@ select::-ms-expand {
 }
 
 /* ================================================= */
-/* 2. CÁC HIỆU ỨNG CŨ (GIỮ NGUYÊN)                   */
+/* 3. TÙY CHỈNH ICON (MATERIAL SYMBOLS)              */
+/* ================================================= */
+.material-symbols-outlined, .material-symbols-rounded {
+    vertical-align: middle;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Khi icon được chọn (active) - dùng cho menu hoặc tab */
+.active .material-symbols-rounded, 
+.active .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+}
+
+/* ================================================= */
+/* 4. CUSTOM SCROLLBAR (THANH CUỘN)                  */
+/* ================================================= */
+/* Áp dụng cho bảng hoặc div có scroll ngang/dọc */
+.overflow-x-auto::-webkit-scrollbar,
+::-webkit-scrollbar { /* Áp dụng cho cả thanh cuộn chính nếu cần */
+    width: 8px;
+    height: 6px; /* Chiều cao cho thanh cuộn ngang */
+}
+
+.overflow-x-auto::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1; /* Màu thanh cuộn */
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; /* Màu khi di chuột vào */
+}
+
+/* ================================================= */
+/* 5. COMPONENTS & EFFECTS (CARD, TABLE, ANIMATION)  */
 /* ================================================= */
 
 /* Hiệu ứng hover nhẹ cho các card thống kê */
@@ -29,26 +80,17 @@ select::-ms-expand {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
 }
 
-/* Tùy chỉnh thanh cuộn cho bảng (nếu dữ liệu quá dài) */
-.overflow-x-auto::-webkit-scrollbar {
-    height: 6px;
+/* Hiệu ứng đổ bóng mượt mà cho Card */
+.shadow-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
 }
 
-.overflow-x-auto::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+/* Hiệu ứng hover cho bảng */
+table tbody tr:hover {
+    background-color: #f9fafb;
 }
 
-.overflow-x-auto::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-}
-
-.overflow-x-auto::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* Hiệu ứng khi thêm dòng mới vào bảng */
+/* Animation khi thêm dòng mới */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -56,50 +98,4 @@ select::-ms-expand {
 
 .new-row {
     animation: fadeIn 0.4s ease-out forwards;
-}
-/* 1. Import Font Chữ */
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
-
-/* 2. Cấu hình cơ bản */
-body {
-    font-family: 'Manrope', sans-serif;
-    background-color: #f8f9fa; /* Màu nền xám nhạt hiện đại */
-    color: #111827;
-}
-
-/* 3. Tùy chỉnh Icon Material Symbols */
-.material-symbols-outlined, .material-symbols-rounded {
-    vertical-align: middle;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-
-/* Khi icon được chọn (active) */
-.active .material-symbols-rounded, 
-.active .material-symbols-outlined {
-    font-variation-settings: 'FILL' 1;
-}
-
-/* 4. Tùy chỉnh thanh cuộn (Scrollbar) cho các bảng hoặc danh sách dài */
-.overflow-x-auto::-webkit-scrollbar {
-    height: 6px;
-}
-.overflow-x-auto::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-.overflow-x-auto::-webkit-scrollbar-thumb {
-    background: #d1d5db; 
-    border-radius: 10px;
-}
-.overflow-x-auto::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af; 
-}
-
-/* 5. Hiệu ứng hover cho bảng (nếu có) */
-table tbody tr:hover {
-    background-color: #f9fafb;
-}
-
-/* 6. Hiệu ứng đổ bóng mượt mà cho Card */
-.shadow-card {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
 }
