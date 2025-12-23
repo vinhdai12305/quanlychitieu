@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Cài đặt Tài khoản - Money Keeper</title>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 text-slate-800 font-display">
+    
+    <div id="header-container" class="sticky top-0 z-50"></div>
+
+    <div class="min-h-screen w-full pt-6 pb-20 px-4 md:px-8">
+        <main class="mx-auto max-w-6xl">
+            
+            <div class="mb-8">
+                <h2 class="text-3xl font-black text-slate-900 tracking-tight">Cài đặt Tài khoản</h2>
+                <p class="text-slate-500 mt-1">Quản lý thông tin hồ sơ và tùy chọn ứng dụng của bạn</p>
+            </div>
+
+            <div class="flex flex-col gap-6">
+                
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4">Thông tin cá nhân</h3>
+                    
+                    <div class="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+                        <div class="flex flex-col items-center gap-3 w-full md:w-auto shrink-0">
+                            <div class="relative group cursor-pointer">
+                                <div class="h-32 w-32 rounded-full bg-cover bg-center border-4 border-white shadow-md ring-1 ring-slate-200" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAj9V4S7LHE1gFh3-_UOOQRwKBgsnqVMqH98OGGATlmx2kyMjtcCS_O0qBaBw6HyLADXpmjhqq-VQmxJkonH4NDaLkqqyqsJfTsGriHioPbglhrglaaKKICKHZzRJMtoIlwpwZeAOziBOEOqV9pE3c3VZxS66LJehZOah46An4AK3uDRlhYldk5IuMDDAge6H2w_LT8k6Dy_fJJCTTI8mRlD_OeBHirRm-ayl2phXXzme-S8VPAC1lam_tJOGxxnki8SlNR6Ne02Hyf");'></div>
+                                <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-white text-3xl">photo_camera</span>
+                                </div>
+                                <div class="absolute bottom-1 right-1 bg-green-600 text-white p-1.5 rounded-full border-2 border-white shadow-sm">
+                                    <span class="material-symbols-outlined text-[16px] block">edit</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-sm font-bold text-slate-700">Ảnh đại diện</p>
+                                <p class="text-xs text-slate-400">JPG, PNG tối đa 2MB</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-bold text-slate-700">Họ và tên</label>
+                                <div class="relative">
+                                    <input class="w-full h-11 pl-10 pr-3 rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm transition-all font-medium" type="text" value="Nguyễn Văn A"/>
+                                    <span class="material-symbols-outlined text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-[20px]">person</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-bold text-slate-700">Email</label>
+                                <div class="relative">
+                                    <input class="w-full h-11 pl-10 pr-3 rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm transition-all font-medium" type="email" value="nguyenvana@example.com"/>
+                                    <span class="material-symbols-outlined text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-[20px]">mail</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-bold text-slate-700">Số điện thoại</label>
+                                <div class="relative">
+                                    <input class="w-full h-11 pl-10 pr-3 rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm transition-all font-medium" type="tel" value="0901234567"/>
+                                    <span class="material-symbols-outlined text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-[20px]">call</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-bold text-slate-700">Ngày sinh</label>
+                                <div class="relative">
+                                    <input class="w-full h-11 pl-10 pr-3 rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm transition-all font-medium" type="date" value="1995-10-20"/>
+                                    <span class="material-symbols-outlined text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 text-[20px]">calendar_month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 h-full flex flex-col">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">lock</span>
+                            </span>
+                            Bảo mật & Mật khẩu
+                        </h3>
+                        <div class="flex flex-col gap-5 flex-1">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-bold text-slate-700">Mật khẩu hiện tại</label>
+                                <div class="relative">
+                                    <input class="w-full h-11 pl-3 pr-10 rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all" placeholder="••••••••" type="password"/>
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 cursor-pointer">
+                                        <span class="material-symbols-outlined text-[20px]">visibility_off</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-bold text-slate-700">Mật khẩu mới</label>
+                                <div class="relative">
+                                    <input class="w-full h-11 pl-3 pr-10 rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all" placeholder="Nhập mật khẩu mới" type="password"/>
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 cursor-pointer">
+                                        <span class="material-symbols-outlined text-[20px]">visibility_off</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-auto pt-2">
+                                <a class="text-sm text-blue-600 font-bold hover:underline" href="#">Quên mật khẩu?</a>
+                                <button class="text-sm text-slate-500 font-medium hover:text-slate-800">Đăng xuất thiết bị khác</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 h-full flex flex-col">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-green-50 text-green-600 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[20px]">tune</span>
+                            </span>
+                            Cài đặt ứng dụng
+                        </h3>
+                        <div class="flex flex-col gap-4 flex-1">
+                            <div class="flex items-center justify-between py-1">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-700">Thông báo</span>
+                                    <span class="text-xs text-slate-400">Nhận thông báo qua email</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input checked="" class="sr-only peer" type="checkbox"/>
+                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                                </label>
+                            </div>
+                            <hr class="border-slate-100 border-dashed my-1">
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-700">Ngôn ngữ</span>
+                                    <span class="text-xs text-slate-400">Chọn ngôn ngữ hiển thị</span>
+                                </div>
+                                <select class="h-9 pl-3 pr-8 rounded-lg border-slate-200 bg-slate-50 text-sm font-medium focus:ring-green-500 focus:border-green-500 cursor-pointer text-slate-700">
+                                    <option>Tiếng Việt</option>
+                                    <option>English (US)</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-700">Tiền tệ</span>
+                                    <span class="text-xs text-slate-400">Đơn vị tiền tệ chính</span>
+                                </div>
+                                <select class="h-9 pl-3 pr-8 rounded-lg border-slate-200 bg-slate-50 text-sm font-medium focus:ring-green-500 focus:border-green-500 cursor-pointer text-slate-700">
+                                    <option>VND (₫)</option>
+                                    <option>USD ($)</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-700">Chế độ tối</span>
+                                    <span class="text-xs text-slate-400">Giao diện người dùng</span>
+                                </div>
+                                <select class="h-9 pl-3 pr-8 rounded-lg border-slate-200 bg-slate-50 text-sm font-medium focus:ring-green-500 focus:border-green-500 cursor-pointer text-slate-700">
+                                    <option>Tắt</option>
+                                    <option>Bật</option>
+                                    <option>Hệ thống</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-4 mt-2">
+                    <button class="px-6 h-12 rounded-lg border border-slate-300 bg-white text-slate-600 font-bold hover:bg-slate-50 transition-all shadow-sm">
+                        Hủy bỏ
+                    </button>
+                    <button class="px-8 h-12 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 shadow-md shadow-green-200 transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[20px]">save</span>
+                        Lưu thay đổi
+                    </button>
+                </div>
+
+                <div class="bg-red-50/50 rounded-xl border border-red-100 p-6 mt-4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="text-base font-bold text-red-600 mb-1">Xóa tài khoản</h3>
+                            <p class="text-sm text-red-500/80">Hành động này sẽ xóa vĩnh viễn dữ liệu của bạn và không thể hoàn tác.</p>
+                        </div>
+                        <button class="px-5 py-2.5 rounded-lg bg-white border border-red-200 text-red-600 font-bold hover:bg-red-600 hover:text-white transition-all text-sm whitespace-nowrap shadow-sm">
+                            Xóa tài khoản
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+</html>
