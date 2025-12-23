@@ -2,7 +2,7 @@
   "name": "quanlychitieu",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/vinhdai12305/quanlychitieu#readme",
+  "homepage": "https://vinhdai12305.github.io/quanlychitieu",
   "bugs": {
     "url": "https://github.com/vinhdai12305/quanlychitieu/issues"
   },
@@ -14,7 +14,6 @@
   "author": "",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
