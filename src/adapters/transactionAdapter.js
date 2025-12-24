@@ -97,3 +97,24 @@ export function toFirestore(transaction) {
 export function fromFirestoreList(docs = []) {
   return docs.map(fromFirestore);
 }
+
+function timestampToDateString(timestamp) {
+    if (!timestamp || !timestamp.toDate) return "";
+    return timestamp.toDate().toISOString().split("T")[0];
+  }
+  
+  export function fromFirestore(doc) {
+    return {
+      id: doc.id,
+      type: doc.type, // income | expense
+      category: doc.category,
+      amount: Number(doc.amount || 0),
+      date: timestampToDateString(doc.date),
+      note: doc.note || ""
+    };
+  }
+  
+  export function fromFirestoreList(docs = []) {
+    return docs.map(fromFirestore);
+  }
+  
