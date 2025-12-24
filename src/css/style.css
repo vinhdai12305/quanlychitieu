@@ -4,6 +4,7 @@
 /* Import font phải luôn nằm ở dòng đầu tiên của file CSS */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
+/* Cấu hình chung */
 body {
     font-family: 'Manrope', sans-serif;
     background-color: #f8f9fa; /* Màu nền xám nhạt hiện đại */
