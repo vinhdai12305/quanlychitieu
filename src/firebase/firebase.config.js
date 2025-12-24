@@ -14,7 +14,5 @@ const firebaseConfig = {
 };
 
 // 3. Khởi tạo Firebase
-const app = initializeApp(firebaseConfig);
-
-// 4. Khởi tạo Firestore và EXPORT để các file khác (như firestore.service.js) có thể dùng
+export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);

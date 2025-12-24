@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyKeeper - Báo cáo & Phân tích</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // QUAN TRỌNG: Tắt preflight để không làm hỏng giao diện cũ
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            },
+            corePlugins: {
+                preflight: false, 
+            }
+        }
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        /* 4. CSS TÙY CHỈNH CHO PHẦN NỘI DUNG (Giữ nguyên style đẹp cũ) */
+        :root { 
+            --bg: #f8fafc; 
+            --card: #ffffff; 
+            --primary: #10b981; /* Đã chỉnh theo màu Emerald của Header */
+            --danger: #ef4444; 
+            --info: #3b82f6; 
+            --text: #1e293b; 
+            --text-light: #64748b; 
+        }
+
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        
+        /* Container chính */
+        .dashboard-container { max-width: 1300px; margin: auto; padding: 30px 20px; }
+
+        /* Các thành phần Grid & Card */
+        .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .report-header h1 { font-size: 1.8rem; font-weight: 700; margin: 0; }
+        
+        .styled-select { padding: 10px 15px; border-radius: 10px; border: 1px solid #e2e8f0; font-weight: 600; cursor: pointer; outline: none; font-family: 'Inter', sans-serif; background: white; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .stat-card, .main-chart-card, .sub-card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .stat-card h2 { margin: 10px 0; font-size: 28px; font-weight: 700; }
+        .stat-card p { margin: 0; color: var(--text-light); font-size: 14px; font-weight: 600; text-transform: uppercase; }
+
+        .main-chart-card { margin-top: 25px; }
+        .chart-wrapper { height: 350px; margin-top: 20px; position: relative; }
+        
+        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px; }
+        
+        /* Progress & List Styles */
+        .cat-item { margin-top: 20px; }
+        .cat-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .progress { background: #f1f5f9; height: 10px; border-radius: 10px; }
+        .bar { height: 100%; border-radius: 10px; }
+        .bar.blue { background: var(--info); } .bar.yellow { background: #f5a623; }
+        .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; } .dot.blue { background: var(--info); } .dot.yellow { background: #f5a623; }
+        
+        .transaction { display: flex; align-items: center; margin-top: 20px; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9; }
+        .transaction:last-child { border-bottom: none; }
+        .tx-icon { background: #f1f5f9; padding: 10px; border-radius: 12px; margin-right: 15px; font-size: 20px; }
+        .tx-details strong { display: block; font-size: 14px; }
+        .tx-details span { font-size: 12px; color: var(--text-light); }
+        .tx-amount { margin-left: auto; font-weight: 600; font-size: 14px; }
+        .tx-amount.negative { color: var(--text); }
+
+        /* Responsive */
+        @media (max-width: 768px) { 
+            .stats-grid, .bottom-grid { grid-template-columns: 1fr; } 
+        }
+
+        /* --- POPUP (MODAL) --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 20px; width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 500; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-submit:hover { opacity: 0.9; }
+        .btn-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+    </style>
+</head>
+<body>
+
+    <nav class="bg-white shadow-sm px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-2 font-bold text-xl text-gray-800 cursor-pointer">
+            <span class="bg-gray-900 text-white px-2 py-1 rounded-md text-sm">MK</span>
+            <span>Money Keeper</span>
+        </div>
+    
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+            <a href="#" class="hover:text-emerald-600 transition">Tổng quan</a>
+            <a href="#" class="hover:text-emerald-600 transition">Chi tiêu</a>
+            <a href="#" class="hover:text-emerald-600 transition">Thu nhập</a>
+            <a href="#" class="hover:text-emerald-600 transition">Ngân sách</a>
+            <a href="#" class="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 font-semibold">Báo cáo</a>
+            <a href="#" class="hover:text-emerald-600 transition">Cài đặt</a>
+        </div>
+    
+        <div class="flex items-center gap-4">
+            <button onclick="openModal()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm flex items-center gap-2">
+                <span>+</span>
+                <span class="hidden sm:inline">Thêm mới</span>
+            </button>
+    
+            <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
+                <div class="text-right hidden sm:block leading-tight">
+                    <div class="text-sm font-semibold text-gray-900">Nguyễn Văn A</div>
+                    <div class="text-xs text-gray-500">Premium</div>
+                </div>
+                <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold text-sm">NA</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        
+        <header class="report-header">
+            <h1>Phân tích tài chính</h1>
+            <div class="filter-box">
+                <select id="periodSelect" class="styled-select" onchange="updateDashboard()">
+                    <option value="current">Tháng này</option>
+                    <option value="previous">Tháng trước</option>
+                </select>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <p>Tổng thu nhập</p>
+                <h2 id="incomeVal">...</h2>
+            </div>
+            <div class="stat-card">
+                <p>Tổng chi tiêu</p>
+                <h2 id="expenseVal">...</h2>
+            </div>
+            <div class="stat-card">
+                <p>Số dư khả dụng</p>
+                <h2 id="balanceVal">...</h2>
+            </div>
+        </section>
+
+        <section class="main-chart-card">
+            <div class="report-header" style="margin-bottom: 0;">
+                <h3 style="font-size: 1.2rem; margin: 0;">Dòng tiền</h3>
+                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">Thu nhập vs Chi tiêu <span id="periodLabel">...</span></p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="flowChart"></canvas>
+            </div>
+        </section>
+
+        <div class="bottom-grid">
+            <div class="sub-card">
+                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Phân loại Chi tiêu</h3>
+                <div class="cat-list"></div>
+            </div>
+            <div class="sub-card">
+                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Giao dịch gần đây</h3>
+                <div class="tx-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="addModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm Giao dịch</h3>
+                <button class="btn-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="form-group">
+                <label>Loại giao dịch</label>
+                <select id="inpType" class="form-control">
+                    <option value="expense">Chi tiêu (Expense)</option>
+                    <option value="income">Thu nhập (Income)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Số tiền (VNĐ)</label>
+                <input type="number" id="inpAmount" class="form-control" placeholder="Ví dụ: 50000">
+            </div>
+            <div class="form-group">
+                <label>Danh mục</label>
+                <select id="inpCategory" class="form-control">
+                    <option value="Ăn uống">Ăn uống</option>
+                    <option value="Mua sắm">Mua sắm</option>
+                    <option value="Nhà ở">Nhà ở</option>
+                    <option value="Di chuyển">Di chuyển</option>
+                    <option value="Lương">Lương</option>
+                    <option value="Giải trí">Giải trí</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ngày</label>
+                <input type="date" id="inpDate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Ghi chú</label>
+                <input type="text" id="inpNote" class="form-control" placeholder="Ghi chú...">
+            </div>
+            <button class="btn-submit" onclick="saveTransaction()">Lưu lại</button>
+        </div>
+    </div>
+    
+    <script>
+        // --- 1. CẤU HÌNH FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiDIFKqm5e_g7MrUMWGTcTvjOtoNhj2GA",
+            authDomain: "quanlichitieu-c30b4.firebaseapp.com",
+            projectId: "quanlichitieu-c30b4",
+            storageBucket: "quanlichitieu-c30b4.firebasestorage.app",
+            messagingSenderId: "385297935024",
+            appId: "1:385297935024:web:26a01ca43a3d6cbc3de975",
+            measurementId: "G-7MQX3Z2ZWL"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        let myChart;
+
+        // --- 2. XỬ LÝ POPUP ---
+        function openModal() {
+            document.getElementById('addModal').style.display = 'flex';
+            document.getElementById('inpDate').valueAsDate = new Date();
+        }
+        function closeModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+
+        // --- 3. LƯU DỮ LIỆU ---
+        async function saveTransaction() {
+            const type = document.getElementById('inpType').value;
+            const amount = Number(document.getElementById('inpAmount').value);
+            const category = document.getElementById('inpCategory').value;
+            const note = document.getElementById('inpNote').value;
+            const dateStr = document.getElementById('inpDate').value;
+
+            if (!amount || !dateStr) { alert("Vui lòng nhập đủ thông tin!"); return; }
+
+            const dateObj = new Date(dateStr); 
+
+            try {
+                await db.collection("transactions").add({
+                    amount: amount, category: category, date: dateObj, note: note, type: type
+                });
+                alert("Đã lưu thành công!");
+                closeModal();
+                updateDashboard(); // Cập nhật lại ngay
+                document.getElementById('inpAmount').value = '';
+                document.getElementById('inpNote').value = '';
+            } catch (error) {
+                console.error(error); alert("Lỗi khi lưu!");
+            }
+        }
+
+        // --- 4. BIỂU ĐỒ & DATA ---
+        function initChart() {
+            const ctx = document.getElementById('flowChart').getContext('2d');
+            const greenGradient = ctx.createLinearGradient(0, 0, 0, 300);
+            greenGradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // Màu Emerald
+            greenGradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Thu nhập', data: [], borderColor: '#10b981', backgroundColor: greenGradient, fill: true, tension: 0.4
+                    }, {
+                        label: 'Chi tiêu', data: [], borderColor: '#ef4444', fill: false, tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { display: false }, x: { grid: { display: false } } } }
+            });
+        }
+
+        async function fetchRealData(month, year) {
+            console.log(`Lấy data T${month}/${year}`);
+            const start = new Date(year, month - 1, 1);
+            const end = new Date(year, month, 0, 23, 59, 59);
+
+            const q = db.collection("transactions")
+                .where("date", ">=", start)
+                .where("date", "<=", end);
+
+            try {
+                const querySnapshot = await q.get();
+                let totalIncome = 0; let totalExpense = 0;
+                let dailyData = {}; let categories = {}; let recentTransactions = [];
+
+                querySnapshot.forEach((doc) => {
+                    const t = doc.data();
+                    const amount = Number(t.amount) || 0;
+                    
+                    let dateObj = t.date && t.date.toDate ? t.date.toDate() : new Date(t.date);
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    const dateKey = `${year}-${month}-${day}`;
+                    
+                    recentTransactions.push({ ...t, jsDate: dateObj, desc: t.note || t.category, displayDate: `${day}/${month}/${year}` });
+
+                    if (t.type === 'income') {
+                        totalIncome += amount;
+                        if (!dailyData[dateKey]) dailyData[dateKey] = { inc: 0, exp: 0 };
+                        dailyData[dateKey].inc += amount;
+                    } else {
+                        totalExpense += amount;
+                        if (!dailyData[dateKey]) dailyData[dateKey] = { inc: 0, exp: 0 };
+                        dailyData[dateKey].exp += amount;
+                        if (!categories[t.category]) categories[t.category] = 0;
+                        categories[t.category] += amount;
+                    }
+                });
+
+                recentTransactions.sort((a, b) => b.jsDate - a.jsDate);
+                return { totalIncome, totalExpense, dailyData, categories, recentTransactions };
+            } catch (error) { console.error(error); return null; }
+        }
+
+        async function updateDashboard() {
+            const period = document.getElementById('periodSelect').value;
+            
+            // Logic lấy ngày hiện tại
+            const today = new Date();
+            let year = today.getFullYear();
+            let month = today.getMonth() + 1;
+
+            if (period === 'previous') {
+                month -= 1;
+                if (month === 0) { month = 12; year -= 1; }
+            }
+            const monthStr = String(month).padStart(2, '0');
+
+            document.getElementById('periodLabel').innerText = `tháng ${monthStr}/${year}`;
+            
+            // Update lại text trong dropdown
+            const options = document.getElementById('periodSelect').options;
+            options[0].text = `Tháng này (T${today.getMonth() + 1}/${today.getFullYear()})`;
+            
+            const data = await fetchRealData(monthStr, year);
+            if (!data) return;
+
+            document.getElementById('incomeVal').innerText = formatCurrency(data.totalIncome);
+            document.getElementById('expenseVal').innerText = formatCurrency(data.totalExpense);
+            document.getElementById('balanceVal').innerText = formatCurrency(data.totalIncome - data.totalExpense);
+
+            const sortedDates = Object.keys(data.dailyData).sort();
+            myChart.data.labels = sortedDates.map(d => d.split('-')[2]); 
+            myChart.data.datasets[0].data = sortedDates.map(d => data.dailyData[d].inc);
+            myChart.data.datasets[1].data = sortedDates.map(d => data.dailyData[d].exp);
+            myChart.update();
+
+            renderCategories(data.categories, data.totalExpense);
+            renderTransactions(data.recentTransactions);
+        }
+
+        function formatCurrency(n) { return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(n); }
+
+        function renderCategories(cats, total) {
+            const container = document.querySelector('.cat-list'); container.innerHTML = '';
+            const sorted = Object.entries(cats).sort((a,b) => b[1] - a[1]);
+            if(sorted.length === 0) container.innerHTML = '<p style="color:#999; text-align:center">Chưa có dữ liệu</p>';
+
+            sorted.forEach(([name, amt], i) => {
+                const pct = total ? Math.round((amt/total)*100) : 0;
+                const color = i % 2 === 0 ? 'blue' : 'yellow';
+                container.innerHTML += `<div class="cat-item"><div class="cat-info"><span><i class="dot ${color}"></i> ${name}</span><span>${formatCurrency(amt)} <b>${pct}%</b></span></div><div class="progress"><div class="bar ${color}" style="width: ${pct}%;"></div></div></div>`;
+            });
+        }
+
+        function renderTransactions(txs) {
+            const container = document.querySelector('.tx-list'); container.innerHTML = '';
+            if(txs.length === 0) container.innerHTML = '<p style="color:#999; text-align:center">Chưa có giao dịch</p>';
+            
+            txs.slice(0, 5).forEach(t => {
+                const isExp = t.type !== 'income';
+                container.innerHTML += `<div class="transaction"><div class="tx-icon">🛒</div><div class="tx-details"><strong>${t.desc}</strong><span>${t.displayDate}</span></div><span class="tx-amount ${isExp ? 'negative' : ''}">${isExp ? '-' : '+'} ${formatCurrency(t.amount)}</span></div>`;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { initChart(); updateDashboard(); });
+    </script>
+</body>
+</html>
