@@ -126,7 +126,7 @@ Dự án được thực hiện bởi sự đóng góp nhiệt huyết của cá
 
 | Thành viên | Vai trò & Đóng góp Chính | Chi tiết Công việc |
 | :--- | :--- | :--- |
-| **Hoàng Tùng** | **Backend Lead & Core Logic** | • Thiết kế kiến trúc Backend trên Firebase Firestore.<br>• Xử lý toàn bộ logic dữ liệu, API services (`transactionAnalytics`, `chartData`).<br>• Tối ưu hóa hiệu năng truy vấn và bảo mật dữ liệu.<br>• Xây dựng các Adapter chuẩn hóa dữ liệu. |
+| **Hoàng Tùng** | **Backend Lead, Core Logic & Deployment** | • Thiết kế kiến trúc Backend trên Firebase Firestore.<br>• Xử lý toàn bộ logic dữ liệu, API services (`transactionAnalytics`, `chartData`).<br>• Quản lý quy trình CI/CD và Deploy dự án lên GitHub Pages.<br>• Tối ưu hóa hiệu năng truy vấn và bảo mật dữ liệu. |
 | **Huy Bảo** | **DevOps & Visualization** | • Setup dự án Firebase, Authentication và Security Rules.<br>• Tích hợp thư viện Chart.js, xây dựng các biểu đồ phân tích trực quan.<br>• Phát triển trang **Báo cáo (Report)** với các chỉ số chuyên sâu.<br>• Tạo dữ liệu mẫu (Seeding data) để kiểm thử hệ thống. |
 | **Vĩnh Đại** | **Frontend (Overview)** | • Phát triển trang **Tổng quan (Dashboard)** với các widget tóm tắt thời gian thực.<br>• Thiết kế Layout chính, Navigation và hệ thống UI Components dùng chung.<br>• Tối ưu hóa giao diện trang chủ và trải nghiệm người dùng (UX) tổng thể. |
 | **Quang Hân** | **Frontend (Transaction)** | • Xây dựng module **Thu nhập & Chi tiêu** (CRUD đầy đủ).<br>• Xử lý logic lọc (Filter), tìm kiếm và phân trang cho danh sách giao dịch.<br>• Thiết kế Form nhập liệu thông minh với Validate dữ liệu chặt chẽ.<br>• Xử lý các tương tác người dùng phức tạp trên trang Transaction. |
