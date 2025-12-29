@@ -71,6 +71,9 @@ export async function loadHeader(headerPath = '/quanlychitieu/components/header.
     // Khởi tạo mobile menu
     initMobileMenu();
 
+    // Highlight active nav link based on current page
+    highlightActiveNavLink();
+
     // Khởi tạo Auth Guard sau khi load header
     try {
       const { initAuthGuard } = await import('../firebase/authGuard.js');
@@ -221,5 +224,36 @@ async function initCurrencyToggle() {
   // Lắng nghe sự kiện currencyChanged từ các trang khác
   window.addEventListener('currencyChanged', (e) => {
     updateCurrencyUI(e.detail);
+  });
+}
+
+// ==========================================
+// HIGHLIGHT ACTIVE NAV LINK
+// ==========================================
+function highlightActiveNavLink() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  if (!navLinks.length) return;
+
+  const currentPath = window.location.pathname;
+
+  // Map page paths to nav link patterns
+  const pageMap = {
+    '/quanlychitieu/': 'Tổng quan',
+    '/quanlychitieu/index.html': 'Tổng quan',
+    '/quanlychitieu/src/page/expense.html': 'Chi tiêu',
+    '/quanlychitieu/src/page/income.html': 'Thu nhập',
+    '/quanlychitieu/src/page/budget.html': 'Ngân sách',
+    '/quanlychitieu/src/page/report.html': 'Báo cáo',
+    '/quanlychitieu/src/page/settings.html': 'Cài đặt'
+  };
+
+  // Get current page name
+  const currentPageName = pageMap[currentPath] || null;
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (currentPageName && link.textContent.trim() === currentPageName) {
+      link.classList.add('active');
+    }
   });
 }
