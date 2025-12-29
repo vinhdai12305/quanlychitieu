@@ -1,6 +1,6 @@
 import './toast.js';
 // budget.js - Refactored to use firestore.service.js with userId filter
-import { listenToUserBudgets, addBudget, deleteDocument, updateAllBudgetsSpent, getTransactionsByMonth, listenToUserTransactionsForMonth } from '../firebase/firestore.service.js';
+import { listenToUserBudgets, addBudget, deleteDocument, updateDocument, updateAllBudgetsSpent, getTransactionsByMonth, listenToUserTransactionsForMonth } from '../firebase/firestore.service.js';
 import { checkAuth } from '../firebase/auth.js';
 import { formatCurrency as formatCurrencyService, getExchangeRate } from '../services/currencyService.js';
 
@@ -241,11 +241,23 @@ window.renderBudgets = function (filterType = 'all') {
                         <p class="text-xs text-gray-400">${desc}</p>
                     </div>
                 </div>
-                <button onclick="deleteBudget('${item.id}')" 
-                    class="opacity-0 group-hover:opacity-100 p-2 hover:bg-red-50 text-gray-300 hover:text-red-500 rounded-lg transition-all"
-                    title="Xóa">
-                    <span class="material-symbols-rounded text-[20px]">more_vert</span>
-                </button>
+                <div class="relative">
+                    <button onclick="toggleBudgetMenu('${item.id}')" 
+                        class="opacity-0 group-hover:opacity-100 p-2 hover:bg-gray-100 text-gray-400 hover:text-gray-600 rounded-lg transition-all"
+                        title="Tùy chọn">
+                        <span class="material-symbols-rounded text-[20px]">more_vert</span>
+                    </button>
+                    <div id="menu-${item.id}" class="hidden absolute right-0 top-full mt-1 w-40 bg-white border border-gray-100 rounded-xl shadow-xl py-1 z-50">
+                        <button onclick="openEditModal('${item.id}')" class="w-full px-4 py-2.5 text-left text-sm font-medium text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">edit</span>
+                            Chỉnh sửa
+                        </button>
+                        <button onclick="showConfirmModal('${item.id}')" class="w-full px-4 py-2.5 text-left text-sm font-medium text-red-500 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-rounded text-[18px]">delete</span>
+                            Xóa
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Amount: Spent / Limit -->
@@ -375,22 +387,141 @@ if (form) {
     });
 }
 
-// Xóa Ngân sách
-window.deleteBudget = async function (id) {
-    if (confirm("Bạn có chắc muốn xóa mục này không?")) {
-        try {
-            const result = await deleteDocument("budgets", id);
-            if (result.success) {
-                alert("✅ Đã xóa!");
-            } else {
-                alert("❌ Lỗi: " + result.error);
-            }
-        } catch (error) {
-            console.error(error);
-            alert("Lỗi: " + error.message);
+// ==========================================
+// DROPDOWN MENU & MODAL FUNCTIONS
+// ==========================================
+
+// Toggle budget menu dropdown
+window.toggleBudgetMenu = function (id) {
+    // Close all other menus first
+    document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+        if (menu.id !== `menu-${id}`) {
+            menu.classList.add('hidden');
         }
+    });
+
+    const menu = document.getElementById(`menu-${id}`);
+    if (menu) {
+        menu.classList.toggle('hidden');
     }
-}
+};
+
+// Close menus when clicking outside
+document.addEventListener('click', function (e) {
+    if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleBudgetMenu"]')) {
+        document.querySelectorAll('[id^="menu-"]').forEach(menu => {
+            menu.classList.add('hidden');
+        });
+    }
+});
+
+// ==========================================
+// EDIT MODAL FUNCTIONS
+// ==========================================
+let editingBudgetId = null;
+
+window.openEditModal = function (id) {
+    // Close dropdown menu
+    document.querySelectorAll('[id^="menu-"]').forEach(menu => menu.classList.add('hidden'));
+
+    // Find budget data
+    const budget = budgets.find(b => b.id === id);
+    if (!budget) return;
+
+    editingBudgetId = id;
+
+    // Populate form
+    document.getElementById('edit-budget-id').value = id;
+    document.getElementById('edit-name').value = budget.name;
+    document.getElementById('edit-limit').value = budget.limit;
+
+    // Show modal
+    document.getElementById('edit-modal').classList.remove('hidden');
+};
+
+window.closeEditModal = function () {
+    document.getElementById('edit-modal').classList.add('hidden');
+    editingBudgetId = null;
+};
+
+// Handle edit form submit
+document.addEventListener('DOMContentLoaded', function () {
+    const editForm = document.getElementById('edit-budget-form');
+    if (editForm) {
+        editForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const id = document.getElementById('edit-budget-id').value;
+            const name = document.getElementById('edit-name').value.trim();
+            const limit = parseFloat(document.getElementById('edit-limit').value);
+
+            if (!name || !limit) {
+                alert('Vui lòng nhập đầy đủ thông tin!');
+                return;
+            }
+
+            try {
+                const result = await updateDocument('budgets', id, {
+                    name: name,
+                    limit: limit
+                });
+
+                if (result.success) {
+                    alert('✅ Đã cập nhật thành công!');
+                    closeEditModal();
+                } else {
+                    alert('❌ Lỗi: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Update error:', error);
+                alert('❌ Lỗi: ' + error.message);
+            }
+        });
+    }
+});
+
+// ==========================================
+// CONFIRM DELETE MODAL FUNCTIONS
+// ==========================================
+let deletingBudgetId = null;
+
+window.showConfirmModal = function (id) {
+    // Close dropdown menu
+    document.querySelectorAll('[id^="menu-"]').forEach(menu => menu.classList.add('hidden'));
+
+    deletingBudgetId = id;
+
+    // Find budget name for message
+    const budget = budgets.find(b => b.id === id);
+    const message = budget
+        ? `Bạn có chắc muốn xóa ngân sách "${budget.name}"? Hành động này không thể hoàn tác.`
+        : 'Bạn có chắc muốn xóa ngân sách này? Hành động này không thể hoàn tác.';
+
+    document.getElementById('confirm-message').textContent = message;
+    document.getElementById('confirm-modal').classList.remove('hidden');
+};
+
+window.closeConfirmModal = function () {
+    document.getElementById('confirm-modal').classList.add('hidden');
+    deletingBudgetId = null;
+};
+
+window.confirmDelete = async function () {
+    if (!deletingBudgetId) return;
+
+    try {
+        const result = await deleteDocument('budgets', deletingBudgetId);
+        if (result.success) {
+            alert('✅ Đã xóa!');
+            closeConfirmModal();
+        } else {
+            alert('❌ Lỗi: ' + result.error);
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Lỗi: ' + error.message);
+    }
+};
 
 // UI Utils
 window.filterData = function (type, btn) {
