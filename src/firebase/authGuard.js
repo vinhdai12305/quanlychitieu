@@ -38,29 +38,17 @@ export function initAuthGuard() {
   onAuthStateChanged(auth, (user) => {
     const currentPath = window.location.pathname;
     const currentPage = currentPath.split('/').pop() || 'index.html';
-    const isInPageFolder = currentPath.includes('/page/');
-    const isRoot = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath.match(/\/quanlychitieu\/?$/);
+
+    // Define paths
+    const loginPath = '/quanlychitieu/src/page/login.html';
+    const dashboardPath = '/quanlychitieu/';
 
     if (!user && isProtectedPage()) {
       console.log('⚠️ Chưa đăng nhập, redirect về login...');
-      // Xác định đường dẫn login dựa trên vị trí hiện tại
-      let loginPath = 'src/page/login.html';
-      if (isInPageFolder) {
-        loginPath = 'login.html'; // Cùng thư mục với các page khác
-      } else if (isRoot) {
-        loginPath = './src/page/login.html';
-      }
       window.location.href = loginPath;
     } else if (user && publicPages.includes(currentPage)) {
       console.log('✅ Đã đăng nhập, redirect về dashboard...');
-      // Xác định đường dẫn index dựa trên vị trí hiện tại
-      let indexPath = 'index.html';
-      if (isInPageFolder) {
-        indexPath = '../../index.html'; // Từ src/page/ lên root
-      } else if (!isRoot) {
-        indexPath = './index.html';
-      }
-      window.location.href = indexPath;
+      window.location.href = dashboardPath;
     } else if (user) {
       console.log('✅ User:', user.email);
     }
