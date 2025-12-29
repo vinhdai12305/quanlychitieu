@@ -68,18 +68,19 @@ export async function logout() {
     console.log('✅ Đã đăng xuất Firebase');
 
     // Redirect về login
-    window.location.href = '/quanlychitieu/src/page/login.html';
+    const isPagesDir = window.location.pathname.includes('/src/page/');
+    const loginPath = isPagesDir ? 'login.html' : './src/page/login.html';
+    window.location.href = loginPath;
 
-    // Backup: Nếu không redirect được
+    // Backup
     setTimeout(() => {
-      if (window.location.pathname !== '/login.html') {
-        window.location.replace('login.html');
-      }
+      window.location.replace(loginPath);
     }, 500);
 
   } catch (error) {
     console.error('❌ Lỗi đăng xuất:', error);
-    window.location.href = 'login.html';
+    // Try reliable path
+    window.location.href = './src/page/login.html';
   }
 }
 
@@ -95,7 +96,12 @@ export function checkAuth(redirectToLogin = true) {
       } else {
         console.log('⚠️ No user logged in');
         if (redirectToLogin) {
-          window.location.href = 'login.html';
+          const isPagesDir = window.location.pathname.includes('/src/page/');
+          const loginPath = isPagesDir ? 'login.html' : './src/page/login.html';
+
+          // Handle GitHub Pages subpath if needed
+          // But relative path ./src/page/login.html from root should work
+          window.location.href = loginPath;
         }
         resolve(null);
       }
