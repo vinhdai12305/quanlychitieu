@@ -646,4 +646,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   // Category filter is now handled by custom dropdown (selectCategory function)
+
+  // Listen for new transactions added via modal
+  window.addEventListener('transactionAdded', async (event) => {
+    console.log('📢 New transaction added, refreshing expense data...', event.detail);
+    await loadDataForMonth();
+  });
 });

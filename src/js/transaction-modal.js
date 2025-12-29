@@ -214,8 +214,14 @@ function setupModalEvents() {
                 closeModal();
                 form.reset();
 
-                // Reload page to update data table
-                window.location.reload();
+                // Reset date and tab
+                if (dateInput) dateInput.valueAsDate = new Date();
+                if (defaultTab) defaultTab.click();
+
+                // Dispatch custom event to notify pages to refresh data
+                window.dispatchEvent(new CustomEvent('transactionAdded', {
+                    detail: transactionData
+                }));
             } else {
                 alert('❌ Lỗi: ' + result.error);
             }

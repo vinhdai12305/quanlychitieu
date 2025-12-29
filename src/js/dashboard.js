@@ -491,4 +491,12 @@ async function initDashboard() {
 }
 
 // Chạy khi load trang
-document.addEventListener('DOMContentLoaded', initDashboard);
+document.addEventListener('DOMContentLoaded', () => {
+  initDashboard();
+
+  // Listen for new transactions added via modal
+  window.addEventListener('transactionAdded', async (event) => {
+    console.log('📢 New transaction added, refreshing dashboard...', event.detail);
+    await loadDashboardData();
+  });
+});
