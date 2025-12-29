@@ -87,10 +87,8 @@ src/
 │   ├── report.js
 │   ├── report_logic.js
 │   ├── settings.js
-│   ├── storage.js
 │   ├── toast.js
 │   ├── transaction-modal.js
-│   └── transaction.js
 ├── 📁 page/
 │   ├── budget.html
 │   ├── expense.html
