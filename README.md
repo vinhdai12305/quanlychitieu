@@ -133,6 +133,14 @@ Dự án được thực hiện bởi sự đóng góp nhiệt huyết của cá
 | **Thành An** | **Frontend (Budget)** | • Phát triển module **Ngân sách (Budget)**.<br>• Xây dựng logic tính toán tiến độ chi tiêu so với hạn mức (Progress tracking).<br>• Thiết kế giao diện cảnh báo khi vượt ngân sách.<br>• Xử lý các Modal thêm/sửa/xóa ngân sách mượt mà. |
 | **Tuấn Bảo** | **Frontend (Settings) & Analytics** | • Xây dựng trang **Cài đặt (Settings)** và quản lý hồ sơ người dùng.<br>• Tích hợp Google Analytics để theo dõi hành vi người dùng.<br>• Xử lý tính năng đổi mật khẩu, cập nhật Avatar và thông tin cá nhân.<br>• Quản lý cấu hình tiền tệ và các tùy chọn hệ thống khác. |
 
+### 📊 Đánh giá Đóng góp (Ước tính)
+
+*   **Hoàng Tùng (~22%)**: Backend Lead + Core + Deploy
+*   **Huy Bảo (~17%)**: DevOps & Visualization
+*   **Quang Hân (~16%)**: Core Feature Transaction
+*   **Vĩnh Đại (~15%)**: UI Lead
+*   **Thành An (~15%)**: Budget
+*   **Tuấn Bảo (~15%)**: Settings & Analytics
 
 ---
 *Cảm ơn bạn đã quan tâm đến Money Keeper! Nếu thấy dự án hữu ích, hãy để lại một ⭐️ trên GitHub nhé!*
