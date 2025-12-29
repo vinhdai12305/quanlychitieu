@@ -10,6 +10,7 @@ import {
 import { checkAuth } from '../firebase/auth.js';
 import { getCategoryInfo, normalizeCategory } from './categoryUtils.js';
 import { formatCurrency, getExchangeRate } from '../services/currencyService.js';
+import { showConfirmModal } from './confirmModal.js';
 
 // Legacy formatter (kept for backward compatibility in specific cases)
 const moneyFormatter = new Intl.NumberFormat('vi-VN', {
@@ -491,13 +492,16 @@ function attachEventListeners() {
   tableBody.querySelectorAll('.btn-delete').forEach(btn => {
     btn.addEventListener('click', async function () {
       const id = this.dataset.id;
-      if (confirm('Bạn có chắc muốn xóa giao dịch này?')) {
+
+      showConfirmModal('Bạn có chắc muốn xóa khoản thu nhập này? Hành động này không thể hoàn tác.', async () => {
         const result = await deleteDocument('transactions', id);
         if (result.success) {
           alert('✅ Đã xóa!');
           await loadDataForMonth();
+        } else {
+          alert('❌ Lỗi: ' + result.error);
         }
-      }
+      });
     });
   });
 
