@@ -14,7 +14,7 @@ import {
  * Load header component và thực thi script bên trong
  * @param {string} headerPath - Đường dẫn đến file header.html
  */
-export async function loadHeader(headerPath = '../../src/components/header.html') {
+export async function loadHeader(headerPath = '/quanlychitieu/components/header.html') {
   const headerContainer = document.getElementById('header-container');
   if (!headerContainer) {
     console.warn('Không tìm thấy element #header-container');

@@ -4,7 +4,7 @@ import { initAuthGuard } from '../firebase/authGuard.js';
 import { analytics } from '../firebase/firebase.config.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadHeader("./src/components/header.html");
+  loadHeader("/quanlychitieu/components/header.html");
   initAuthGuard();
 });
 

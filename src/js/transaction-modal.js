@@ -10,7 +10,7 @@ import { addTransaction, getUserBudgetsOnce } from '../firebase/firestore.servic
 let currentBudgets = [];
 
 export function initTransactionModal() {
-    const modalPath = new URL('../components/transaction-modal.html', import.meta.url).href;
+    const modalPath = '/quanlychitieu/components/transaction-modal.html';
 
     // Check if modal already exists to avoid duplicates
     if (document.getElementById('transaction-modal')) return;

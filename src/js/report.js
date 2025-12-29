@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (!user) return;
 
   // Load header
-  loadHeader('../components/header.html');
+  loadHeader('/quanlychitieu/components/header.html');
 
   // Load data và vẽ charts
   await initCharts();

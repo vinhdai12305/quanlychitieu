@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!currentUser) return;
 
     // Load header
-    loadHeader('../components/header.html');
+    loadHeader('/quanlychitieu/components/header.html');
 
     // Load user profile
     await loadUserProfile();

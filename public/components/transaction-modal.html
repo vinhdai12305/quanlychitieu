@@ -1,0 +1,188 @@
+<!-- src/components/transaction-modal.html -->
+<div id="transaction-modal" class="fixed inset-0 z-[100] hidden transition-opacity duration-300 font-body">
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" id="transaction-modal-overlay"></div>
+
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div
+            class="bg-white rounded-[32px] w-full max-w-xl p-8 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] modal-animate pointer-events-auto relative transform transition-all scale-100 opacity-100">
+
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-2xl font-extrabold text-gray-900 leading-tight">Thêm Giao Dịch Mới</h3>
+                <button id="transaction-modal-close"
+                    class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                    <span class="material-symbols-rounded text-[24px]">close</span>
+                </button>
+            </div>
+
+            <form id="transaction-form">
+                <div class="space-y-5">
+
+                    <!-- Transaction Type (Tabs) -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Loại
+                            giao dịch</label>
+                        <div class="flex bg-gray-100/50 p-1 rounded-2xl">
+                            <button type="button" data-type="expense"
+                                class="transaction-type-btn flex-1 py-3 rounded-xl text-sm font-bold transition-all text-gray-500 hover:text-gray-900">Chi
+                                tiêu</button>
+                            <button type="button" data-type="income"
+                                class="transaction-type-btn flex-1 py-3 rounded-xl text-sm font-bold transition-all text-gray-500 hover:text-gray-900">Thu
+                                nhập</button>
+                        </div>
+                        <input type="hidden" id="transaction-type" name="type" value="expense">
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Mô tả
+                            giao dịch</label>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-rounded absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">notes</span>
+                            <input id="transaction-desc" name="note" type="text"
+                                class="w-full pl-12 pr-5 py-4 rounded-2xl border border-gray-200 bg-white focus:border-primary focus:ring-4 focus:ring-emerald-500/10 outline-none font-medium text-gray-900 placeholder-gray-400 text-base transition-all"
+                                placeholder="Ví dụ: Ăn trưa tại văn phòng">
+                        </div>
+                    </div>
+
+                    <!-- Amount and Currency -->
+                    <div class="grid grid-cols-[1.5fr_1fr] gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Số
+                                tiền</label>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-rounded absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">payments</span>
+                                <input id="transaction-amount" name="amount" type="number"
+                                    class="w-full pl-12 pr-5 py-4 rounded-2xl border border-gray-200 bg-white focus:border-primary focus:ring-4 focus:ring-emerald-500/10 outline-none font-medium text-gray-900 placeholder-gray-400 text-base transition-all"
+                                    placeholder="0" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Loại
+                                tiền</label>
+                            <div class="relative">
+                                <select id="transaction-currency"
+                                    class="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white focus:border-primary outline-none font-bold text-gray-900 appearance-none cursor-pointer text-base transition-all">
+                                    <option value="VND">VNĐ</option>
+                                    <option value="USD">USD</option>
+                                </select>
+                                <span
+                                    class="material-symbols-rounded absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">expand_more</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div id="category-container">
+                        <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Danh
+                            mục</label>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-rounded absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-[20px] z-10">category</span>
+
+                            <!-- Expense Categories -->
+                            <select id="expense-category" name="category"
+                                class="category-select w-full pl-12 pr-5 py-4 rounded-2xl border border-gray-200 bg-white focus:border-primary outline-none font-medium text-gray-900 appearance-none cursor-pointer text-base transition-all duration-300"
+                                required>
+                                <option value="" disabled selected>Chọn danh mục chi tiêu</option>
+                                <option value="Ăn uống">🍔 Ăn uống</option>
+                                <option value="Di chuyển">🚗 Di chuyển</option>
+                                <option value="Mua sắm">🛍️ Mua sắm</option>
+                                <option value="Hóa đơn">🧾 Hóa đơn</option>
+                                <option value="Giải trí">🎮 Giải trí</option>
+                                <option value="Giáo dục">📚 Giáo dục</option>
+                                <option value="Sức khỏe">💊 Sức khỏe</option>
+                                <option value="Du lịch">✈️ Du lịch</option>
+                                <option value="Chi tiêu khác">📦 Chi tiêu khác</option>
+                            </select>
+
+                            <!-- Income Categories (Hidden by default) -->
+                            <select id="income-category"
+                                class="category-select hidden w-full pl-12 pr-5 py-4 rounded-2xl border border-gray-200 bg-white focus:border-primary outline-none font-medium text-gray-900 appearance-none cursor-pointer text-base transition-all duration-300">
+                                <option value="" disabled selected>Chọn nguồn thu nhập</option>
+                                <option value="Lương">💰 Lương</option>
+                                <option value="Thưởng">🎁 Thưởng</option>
+                                <option value="Đầu tư">📈 Đầu tư</option>
+                                <option value="Freelance">💼 Freelance</option>
+                                <option value="Thu nhập khác">📦 Thu nhập khác</option>
+                            </select>
+
+                            <span
+                                class="material-symbols-rounded absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">expand_more</span>
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Ngày
+                            giao dịch</label>
+                        <div class="relative">
+                            <input id="transaction-date" name="date" type="date"
+                                class="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-white focus:border-primary focus:ring-4 focus:ring-emerald-500/10 outline-none font-medium text-gray-900 placeholder-gray-400 text-base transition-all cursor-pointer"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Budget Selection (Only for Expense) -->
+                    <div id="budget-container" class="transition-all duration-300">
+                        <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Tính vào
+                            ngân sách</label>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-rounded absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-[20px] z-10">account_balance_wallet</span>
+                            <select id="transaction-budget" name="budgetId"
+                                class="w-full pl-12 pr-5 py-4 rounded-2xl border border-gray-200 bg-white focus:border-primary outline-none font-medium text-gray-900 appearance-none cursor-pointer text-base transition-all">
+                                <option value="">-- Không tính vào ngân sách --</option>
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                            <span
+                                class="material-symbols-rounded absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">expand_more</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1 ml-1">Bỏ trống nếu không muốn tính vào ngân sách nào</p>
+                    </div>
+
+
+                    <div class="grid grid-cols-2 gap-4 mt-4 pt-2">
+                        <button type="button" id="transaction-modal-cancel"
+                            class="w-full py-3.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-50 hover:border-gray-300 transition-all">
+                            Hủy
+                        </button>
+                        <button type="submit"
+                            class="w-full py-3.5 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-200 hover:bg-primary-hover hover:-translate-y-0.5 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <span class="material-symbols-rounded">check</span>
+                            Lưu giao dịch
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styles for the modal if needed, mainly relying on Tailwind */
+    .modal-animate {
+        animation: modalPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalPopIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    /* Active tab style */
+    .transaction-type-btn.active {
+        background-color: white;
+        color: #10b981;
+        /* primary color */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+</style>
