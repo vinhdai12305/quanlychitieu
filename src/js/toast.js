@@ -84,13 +84,8 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-// Create container
-let toastContainer = document.querySelector('.toast-container');
-if (!toastContainer) {
-    toastContainer = document.createElement('div');
-    toastContainer.className = 'toast-container';
-    document.body.appendChild(toastContainer);
-}
+// Container initialization moved to show()
+
 
 const ICONS = {
     success: '<span class="material-symbols-outlined text-[18px]">check</span>',
@@ -110,6 +105,15 @@ export const Toast = {
             if (msgStr.includes('✅') || msgStr.toLowerCase().includes('thành công')) type = 'success';
             else if (msgStr.includes('❌') || msgStr.toLowerCase().includes('lỗi') || msgStr.toLowerCase().includes('thất bại')) type = 'error';
             else if (msgStr.includes('⚠️')) type = 'warning';
+        }
+
+        // Lazy init container
+        let toastContainer = document.querySelector('.toast-container');
+        if (!toastContainer) {
+            if (!document.body) return; // Safety check
+            toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container';
+            document.body.appendChild(toastContainer);
         }
 
         const toast = document.createElement('div');
