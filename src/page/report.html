@@ -127,10 +127,15 @@
                 <div class="cat-list"></div>
             </div>
             <div class="sub-card">
-                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Giao dịch gần đây</h3>
-                <div class="tx-list"></div>
+                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Phân loại Thu nhập</h3>
+                <div class="income-cat-list"></div>
             </div>
         </div>
+
+        <section class="main-chart-card" style="margin-top: 24px;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Giao dịch gần đây</h3>
+            <div class="tx-list"></div>
+        </section>
     </div>
 
 
@@ -329,6 +334,7 @@
 
                 // Render Categories & Transactions
                 renderCategories(data.transactions, data.totalExpense);
+                renderIncomeCategories(data.transactions, data.totalIncome);
                 renderTransactions(data.transactions);
 
             } catch (error) {
@@ -345,6 +351,40 @@
             txs.filter(t => t.type === 'expense').forEach(t => {
                 const normalizedName = normalizeCategory(t.category, 'expense');
                 const categoryInfo = getCategoryInfo(t.category, 'expense');
+                if (!sums[normalizedName]) {
+                    sums[normalizedName] = { amount: 0, color: categoryInfo.color };
+                }
+                sums[normalizedName].amount += t.amount;
+            });
+
+            Object.entries(sums).sort((a, b) => b[1].amount - a[1].amount).forEach(([name, data]) => {
+                const pct = Math.round((data.amount / total) * 100);
+                const hexColor = data.color;
+
+                container.innerHTML += `
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-1 text-sm">
+                            <span class="flex items-center gap-2 font-medium text-slate-700">
+                                <span class="w-2 h-2 rounded-full" style="background-color: ${hexColor}"></span> ${name}
+                            </span>
+                            <span class="text-slate-500 font-medium">${formatCurrency(data.amount, null, currentRate)} <b class="text-slate-800 ml-1">${pct}%</b></span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="h-full rounded-full" style="width: ${pct}%; background-color: ${hexColor}"></div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function renderIncomeCategories(txs, total) {
+            const container = document.querySelector('.income-cat-list'); container.innerHTML = '';
+            if (total === 0) { container.innerHTML = '<p style="color:#999; text-align:center; padding: 20px;">Chưa có thu nhập</p>'; return; }
+
+            // Group by income category
+            const sums = {};
+            txs.filter(t => t.type === 'income').forEach(t => {
+                const normalizedName = normalizeCategory(t.category, 'income');
+                const categoryInfo = getCategoryInfo(t.category, 'income');
                 if (!sums[normalizedName]) {
                     sums[normalizedName] = { amount: 0, color: categoryInfo.color };
                 }
