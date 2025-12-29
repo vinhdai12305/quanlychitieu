@@ -9,7 +9,7 @@
 *   **📊 Báo cáo Trực quan**: Biểu đồ thống kê thu chi chi tiết theo tuần, tháng, giúp bạn nắm bắt dòng tiền ngay lập tức.
 *   **💸 Quản lý Thu/Chi**: Ghi chép giao dịch nhanh chóng. Phân loại rõ ràng (Ăn uống, Mua sắm, Lương, Thưởng...).
 *   **🎯 Lập Ngân sách**: Thiết lập giới hạn chi tiêu cho từng danh mục. Cảnh báo khi bạn tiêu quá tay.
-*   **📱 Giao diện Hiện đại**: Thiết kế Responsive, tối ưu cho cả trải nghiệm trên Desktop và Mobile.
+*   **📱 Giao diện Hiện đại**: Thiết kế Responsive, tối ưu cho trải nghiệm trên Desktop .
 *   **☁️ Đồng bộ đám mây**: Dữ liệu được lưu trữ an toàn trên Firebase, truy cập mọi lúc mọi nơi.
 *   **🌍 Đa tiền tệ**: Hỗ trợ chuyển đổi tiền tệ linh hoạt (VND/USD) với tỷ giá cập nhật theo thời gian thực.
 
@@ -50,13 +50,63 @@ Dự án tuân thủ mô hình phân lớp rõ ràng, tách biệt giữa giao d
 
 ```
 src/
-├── 📁 firebase/       # Cấu hình Firebase & các hàm xử lý DB cấp thấp (Firestore services)
-├── 📁 repositories/   # Lớp trung gian lấy dữ liệu từ DB (Data Access Layer)
-├── 📁 services/       # Logic nghiệp vụ, tính toán thống kê (Business Logic Layer)
-├── 📁 adapters/       # Chuẩn hoá dữ liệu giữa Firestore và Ứng dụng
-├── 📁 charts/         # Các component biểu đồ độc lập
-├── 📁 page/           # Các trang giao diện (HTML files)
-└── 📁 js/             # Logic điều khiển giao diện (Controllers)
+├── 📁 adapters/
+│   └── transactionAdapter.js     # Chuẩn hoá dữ liệu
+├── 📁 assets/                    # Favicon, icons...
+├── 📁 charts/
+│   ├── cashflowWeeklyChart.js
+│   ├── expensePieChart.js
+│   └── incomeExpenseBarChart.js
+├── 📁 components/
+│   ├── dateRangePicker.js
+│   ├── footer.html
+│   ├── header.html
+│   └── transaction-modal.html
+├── 📁 css/
+│   └── style.css
+├── 📁 firebase/
+│   ├── auth.js
+│   ├── authGuard.js
+│   ├── firebase.config.js
+│   └── firestore.service.js
+├── 📁 js/
+│   ├── components/
+│   │   └── dateRangePicker.js
+│   ├── auth.js
+│   ├── budget.js
+│   ├── categoryUtils.js
+│   ├── confirmModal.js
+│   ├── dashboard.js
+│   ├── expense.js
+│   ├── headerLoader.js
+│   ├── income.js
+│   ├── login.js
+│   ├── logout.js
+│   ├── main.js
+│   ├── register.js
+│   ├── report.js
+│   ├── report_logic.js
+│   ├── settings.js
+│   ├── storage.js
+│   ├── toast.js
+│   ├── transaction-modal.js
+│   └── transaction.js
+├── 📁 page/
+│   ├── budget.html
+│   ├── expense.html
+│   ├── income.html
+│   ├── login.html
+│   ├── register.html
+│   ├── report.html
+│   └── settings.html
+├── 📁 repositories/
+│   └── transactionRepository.js
+├── 📁 scripts/
+├── 📁 services/
+│   ├── chartData.service.js
+│   ├── currencyService.js
+│   └── transactionAnalytics.service.js
+└── 📁 utils/
 ```
 
 ### Luồng xử lý dữ liệu (Data Flow)
@@ -70,7 +120,8 @@ src/
 
 ## 👨‍💻 Tác giả
 
-Phát triển bởi **[Tên của bạn/Team của bạn]**.
+Phát triển bởi **[Nhóm 1(Hoàng Tùng, Tuấn Bảo, Huy Bảo, Vĩnh Đại, Thành An, Quang Hân)]**.
+
 
 ---
 *Cảm ơn bạn đã quan tâm đến Money Keeper! Nếu thấy dự án hữu ích, hãy để lại một ⭐️ trên GitHub nhé!*
