@@ -120,7 +120,18 @@ src/
 
 ## 👨‍💻 Tác giả
 
-Phát triển bởi **[Nhóm 1(Hoàng Tùng, Tuấn Bảo, Huy Bảo, Vĩnh Đại, Thành An, Quang Hân)]**.
+### 👥 Đội ngũ Phát triển (Nhóm 1)
+
+Dự án được thực hiện bởi sự đóng góp nhiệt huyết của các thành viên, mỗi người đảm nhận các vai trò chuyên biệt để tạo nên một sản phẩm hoàn chỉnh:
+
+| Thành viên | Vai trò & Đóng góp Chính | Chi tiết Công việc |
+| :--- | :--- | :--- |
+| **Hoàng Tùng** | **Backend Lead & Core Logic** | • Thiết kế kiến trúc Backend trên Firebase Firestore.<br>• Xử lý toàn bộ logic dữ liệu, API services (`transactionAnalytics`, `chartData`).<br>• Tối ưu hóa hiệu năng truy vấn và bảo mật dữ liệu.<br>• Xây dựng các Adapter chuẩn hóa dữ liệu. |
+| **Huy Bảo** | **DevOps & Visualization** | • Setup dự án Firebase, Authentication và Security Rules.<br>• Tích hợp thư viện Chart.js, xây dựng các biểu đồ phân tích trực quan.<br>• Phát triển trang **Báo cáo (Report)** với các chỉ số chuyên sâu.<br>• Tạo dữ liệu mẫu (Seeding data) để kiểm thử hệ thống. |
+| **Vĩnh Đại** | **Frontend (Overview)** | • Phát triển trang **Tổng quan (Dashboard)** với các widget tóm tắt thời gian thực.<br>• Thiết kế Layout chính, Navigation và hệ thống UI Components dùng chung.<br>• Tối ưu hóa giao diện trang chủ và trải nghiệm người dùng (UX) tổng thể. |
+| **Quang Hân** | **Frontend (Transaction)** | • Xây dựng module **Thu nhập & Chi tiêu** (CRUD đầy đủ).<br>• Xử lý logic lọc (Filter), tìm kiếm và phân trang cho danh sách giao dịch.<br>• Thiết kế Form nhập liệu thông minh với Validate dữ liệu chặt chẽ.<br>• Xử lý các tương tác người dùng phức tạp trên trang Transaction. |
+| **Thành An** | **Frontend (Budget)** | • Phát triển module **Ngân sách (Budget)**.<br>• Xây dựng logic tính toán tiến độ chi tiêu so với hạn mức (Progress tracking).<br>• Thiết kế giao diện cảnh báo khi vượt ngân sách.<br>• Xử lý các Modal thêm/sửa/xóa ngân sách mượt mà. |
+| **Tuấn Bảo** | **Frontend (Settings) & Analytics** | • Xây dựng trang **Cài đặt (Settings)** và quản lý hồ sơ người dùng.<br>• Tích hợp Google Analytics để theo dõi hành vi người dùng.<br>• Xử lý tính năng đổi mật khẩu, cập nhật Avatar và thông tin cá nhân.<br>• Quản lý cấu hình tiền tệ và các tùy chọn hệ thống khác. |
 
 
 ---
