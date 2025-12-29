@@ -135,12 +135,12 @@ Dự án được thực hiện bởi sự đóng góp nhiệt huyết của cá
 
 ### 📊 Đánh giá Đóng góp (Ước tính)
 
-*   **Hoàng Tùng (~22%)**: Backend Lead + Core + Deploy
-*   **Huy Bảo (~17%)**: DevOps & Visualization
-*   **Quang Hân (~16%)**: Core Feature Transaction
-*   **Vĩnh Đại (~15%)**: UI Lead
-*   **Thành An (~15%)**: Budget
-*   **Tuấn Bảo (~15%)**: Settings & Analytics
+*   **Hoàng Tùng (~25%)**: Backend Lead + Core + Deploy
+*   **Huy Bảo    (~15%)**: DevOps & Visualization
+*   **Quang Hân  (~15%)**: Core Feature Transaction
+*   **Vĩnh Đại   (~15%)**: UI Lead
+*   **Thành An   (~15%)**: Budget
+*   **Tuấn Bảo   (~15%)**: Settings & Analytics
 
 ---
 *Cảm ơn bạn đã quan tâm đến Money Keeper! Nếu thấy dự án hữu ích, hãy để lại một ⭐️ trên GitHub nhé!*
