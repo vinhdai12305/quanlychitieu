@@ -114,6 +114,50 @@ export async function getTransactionsByMonth(month, year) {
 }
 
 // ==========================================
+// 3.1. LẤY TRANSACTIONS THEO RANGE (NEW)
+// ==========================================
+export async function getTransactionsByDateRange(startDate, endDate) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("Chưa đăng nhập!");
+
+  // Ensure dates are valid Date objects
+  const start = new Date(startDate); // Start of day 00:00:00
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(endDate); // End of day 23:59:59
+  end.setHours(23, 59, 59, 999);
+
+  const startTimestamp = Timestamp.fromDate(start);
+  const endTimestamp = Timestamp.fromDate(end);
+
+  console.log(`🔍 Querying transactions from ${start.toISOString()} to ${end.toISOString()}`);
+
+  const q = query(
+    collection(db, "transactions"),
+    where("userId", "==", user.uid),
+    where("date", ">=", startTimestamp),
+    where("date", "<=", endTimestamp),
+    orderBy("date", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map(doc => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      type: data.type,
+      category: data.category,
+      amount: data.amount,
+      note: data.description || '',
+      date: timestampToDateString(data.date),
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt
+    };
+  });
+}
+
+// ==========================================
 // 4. REALTIME LISTENER - Lắng nghe thay đổi (UPDATED)
 // ==========================================
 export function listenToUserTransactions(callback, filterType = null) {
@@ -275,6 +319,28 @@ export async function updateDocument(collectionName, docId, data) {
 // ==========================================
 export async function getMonthlyStats(month, year) {
   const transactions = await getTransactionsByMonth(month, year);
+
+  const income = transactions
+    .filter(t => t.type === 'income')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const expense = transactions
+    .filter(t => t.type === 'expense')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  return {
+    totalIncome: income,
+    totalExpense: expense,
+    balance: income - expense,
+    transactions
+  };
+}
+
+// ==========================================
+// 8.1. THỐNG KÊ THEO RANGE (NEW)
+// ==========================================
+export async function getStatsByDateRange(startDate, endDate) {
+  const transactions = await getTransactionsByDateRange(startDate, endDate);
 
   const income = transactions
     .filter(t => t.type === 'income')

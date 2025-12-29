@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
         rel="stylesheet" />
 
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Use default config to ensure compatibility with global modal styles
@@ -44,25 +45,7 @@
 
         <header class="flex flex-wrap items-center justify-between gap-4 mb-6">
             <h1 class="text-2xl font-bold text-gray-900">Phân tích tài chính</h1>
-            <div class="relative">
-                <button onclick="toggleMonthDropdown()"
-                    class="group bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:border-primary transition-all flex items-center gap-3 min-w-[170px] justify-between cursor-pointer">
-                    <div class="flex items-center gap-2 pointer-events-none">
-                        <span class="material-symbols-outlined text-[20px] text-gray-400">calendar_today</span>
-                        <span id="selected-month">Tháng 12/2025</span>
-                    </div>
-                    <span id="month-arrow"
-                        class="material-symbols-outlined text-[20px] text-gray-400 transition-transform duration-300">expand_more</span>
-                </button>
-
-                <div id="month-dropdown"
-                    class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 z-50 origin-top-right max-h-80 overflow-y-auto">
-                    <div
-                        class="px-4 py-2 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider border-b border-gray-50 mb-1">
-                        Chọn tháng</div>
-                    <div id="month-options"></div>
-                </div>
-            </div>
+            <div id="report-date-picker" class="relative z-40"></div>
         </header>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -141,15 +124,15 @@
 
 
     <script type="module">
-        import { getMonthlyStats } from '../../src/firebase/firestore.service.js';
+        import { getStatsByDateRange } from '../../src/firebase/firestore.service.js';
         import { checkAuth } from '../../src/firebase/auth.js';
         import { normalizeCategory, getCategoryInfo } from '../../src/js/categoryUtils.js';
         import { formatCurrency, getExchangeRate } from '../../src/services/currencyService.js';
+        import { DateRangePicker } from '../../src/js/components/dateRangePicker.js';
 
         let myChart;
-        let selectedMonth = new Date().getMonth() + 1;
-        let selectedYear = new Date().getFullYear();
         let currentRate = null; // Cached exchange rate
+        let picker = null;
 
         // Helper to get current currency code
         function getCurrentCurrencyCode() {
@@ -164,91 +147,6 @@
             }
             return amountVND;
         }
-
-
-        // --- POPULATE MONTH FILTER (Custom Dropdown) ---
-        function populateMonthFilter() {
-            const container = document.getElementById('month-options');
-            if (!container) return;
-
-            const today = new Date();
-            const currentMonth = today.getMonth() + 1;
-            const currentYear = today.getFullYear();
-
-            let html = '';
-            for (let i = 0; i < 12; i++) {
-                let month = currentMonth - i;
-                let year = currentYear;
-
-                if (month <= 0) {
-                    month += 12;
-                    year -= 1;
-                }
-
-                const isActive = month === selectedMonth && year === selectedYear;
-
-                html += `
-                <div onclick="selectMonth(${month}, ${year})"
-                    class="month-item px-4 py-2.5 text-sm cursor-pointer flex justify-between items-center ${isActive ? 'bg-emerald-50 text-emerald-600 font-bold' : 'hover:bg-emerald-50 hover:text-emerald-600 font-medium'}">
-                    <span>Tháng ${month}/${year}</span>
-                    ${isActive ? '<span class="material-symbols-outlined text-[18px]">check</span>' : ''}
-                </div>`;
-            }
-
-            container.innerHTML = html;
-            updateSelectedMonthText();
-        }
-
-        // Update selected month text display
-        function updateSelectedMonthText() {
-            const el = document.getElementById('selected-month');
-            if (el) {
-                el.textContent = `Tháng ${selectedMonth}/${selectedYear}`;
-            }
-        }
-
-        // Toggle month dropdown - Export to window
-        window.toggleMonthDropdown = function () {
-            const dropdown = document.getElementById('month-dropdown');
-            const arrow = document.getElementById('month-arrow');
-            if (dropdown) {
-                dropdown.classList.toggle('hidden');
-                if (arrow) {
-                    arrow.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-                }
-            }
-        };
-
-        // Select month from dropdown - Export to window
-        window.selectMonth = function (month, year) {
-            selectedMonth = month;
-            selectedYear = year;
-
-            updateSelectedMonthText();
-            populateMonthFilter();
-
-            // Close dropdown
-            const dropdown = document.getElementById('month-dropdown');
-            const arrow = document.getElementById('month-arrow');
-            if (dropdown) {
-                dropdown.classList.add('hidden');
-                if (arrow) arrow.style.transform = 'rotate(0deg)';
-            }
-
-            // Reload data
-            loadData();
-        };
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function (e) {
-            const dropdown = document.getElementById('month-dropdown');
-            const button = e.target.closest('button[onclick="toggleMonthDropdown()"]');
-            if (!button && dropdown && !dropdown.contains(e.target)) {
-                dropdown.classList.add('hidden');
-                const arrow = document.getElementById('month-arrow');
-                if (arrow) arrow.style.transform = 'rotate(0deg)';
-            }
-        });
 
         // --- SETUP CHART ---
         function initChart() {
@@ -295,20 +193,14 @@
         }
 
         // --- FETCH & PROCESS DATA ---
-        async function loadData() {
-            const user = await checkAuth(false);
-            if (!user) return;
-
-            // Pre-load exchange rate for currency formatting
-            currentRate = await getExchangeRate();
-
-            const monthStr = String(selectedMonth).padStart(2, '0');
-
+        async function loadData(startDate, endDate) {
             // Update Labels
-            document.getElementById('periodLabel').innerText = `tháng ${monthStr}/${selectedYear}`;
+            const startStr = startDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+            const endStr = endDate.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('periodLabel').innerText = `${startStr} - ${endStr}`;
 
             try {
-                const data = await getMonthlyStats(selectedMonth, selectedYear);
+                const data = await getStatsByDateRange(startDate, endDate);
 
                 // Update Stats (sử dụng formatCurrency để hỗ trợ VND/USD)
                 document.getElementById('incomeVal').innerText = formatCurrency(data.totalIncome, null, currentRate);
@@ -316,20 +208,42 @@
                 document.getElementById('balanceVal').innerText = formatCurrency(data.balance, null, currentRate);
 
                 // Build daily data
-                const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-                const incomeByDay = Array(daysInMonth).fill(0);
-                const expenseByDay = Array(daysInMonth).fill(0);
+                // Calculate number of days
+                const diffTime = Math.abs(endDate - startDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                // Initialize map for all dates in range
+                const incomeByDate = new Map();
+                const expenseByDate = new Map();
+                const labels = [];
+
+                for (let i = 0; i < diffDays; i++) {
+                    const d = new Date(startDate);
+                    d.setDate(d.getDate() + i);
+
+                    // Key format YYYY-MM-DD
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const key = `${year}-${month}-${day}`;
+
+                    incomeByDate.set(key, 0);
+                    expenseByDate.set(key, 0);
+                    labels.push(`${day}/${month}`);
+                }
 
                 data.transactions.forEach(t => {
-                    const day = parseInt(t.date.split('-')[2]) - 1;
-                    if (t.type === 'income') incomeByDay[day] += t.amount;
-                    else expenseByDay[day] += t.amount;
+                    // t.date is YYYY-MM-DD
+                    if (incomeByDate.has(t.date)) {
+                        if (t.type === 'income') incomeByDate.set(t.date, incomeByDate.get(t.date) + t.amount);
+                        else expenseByDate.set(t.date, expenseByDate.get(t.date) + t.amount);
+                    }
                 });
 
                 // Update chart
-                myChart.data.labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-                myChart.data.datasets[0].data = incomeByDay.map(v => convertAmount(v));
-                myChart.data.datasets[1].data = expenseByDay.map(v => convertAmount(v));
+                myChart.data.labels = labels;
+                myChart.data.datasets[0].data = Array.from(incomeByDate.values()).map(v => convertAmount(v));
+                myChart.data.datasets[1].data = Array.from(expenseByDate.values()).map(v => convertAmount(v));
                 myChart.update();
 
                 // Render Categories & Transactions
@@ -439,9 +353,23 @@
 
         // --- INITIALIZE ---
         document.addEventListener('DOMContentLoaded', async () => {
-            populateMonthFilter();
+            const user = await checkAuth();
+            if (!user) return;
+
+            // Pre-load exchange rate
+            currentRate = await getExchangeRate();
+
             initChart();
-            await loadData();
+
+            // Init Date Picker
+            picker = new DateRangePicker('report-date-picker', {
+                onApply: (start, end) => {
+                    loadData(start, end);
+                }
+            });
+
+            // Initial load with picker's default date (This Month)
+            loadData(picker.startDate, picker.endDate);
         });
     </script>
 
