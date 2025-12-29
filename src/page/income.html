@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Quản lý Thu nhập - Money Keeper</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
+        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../src/css/style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { "primary": "#10b981", "primary-hover": "#059669", "dark": "#111827", "bg-main": "#f3f4f6" },
+                    fontFamily: { "body": ["Manrope", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Style cho stat-card giống trang Báo cáo */
+        .stat-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+    </style>
+</head>
+
+<body class="text-dark bg-bg-main font-body overflow-hidden">
+
+    <div id="header-container" class="sticky top-0 z-50"></div>
+
+    <div class="flex h-screen w-full overflow-hidden">
+        <main class="flex-1 flex flex-col h-full overflow-y-auto bg-[#F3F4F6] p-4 sm:p-8">
+
+            <div class="mx-auto max-w-7xl w-full flex flex-col gap-6 pb-20">
+
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Quản lý Thu nhập</h1>
+                        <p class="text-sm text-gray-500 mt-1">Theo dõi tất cả các nguồn thu nhập của bạn</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Tổng thu nhập tháng</p>
+                            <div class="p-2 rounded-lg bg-green-50 text-emerald-600">
+                                <span class="material-symbols-outlined text-[22px]">trending_up</span>
+                            </div>
+                        </div>
+                        <h3 id="summary-income" class="number-style-report mb-2">0 ₫</h3>
+                        <div
+                            class="inline-flex items-center gap-1 rounded-md bg-green-50 px-2 py-1 text-xs font-bold text-emerald-600">
+                            +15% <span class="text-gray-400 font-medium ml-1">vs tháng trước</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Nguồn thu chính</p>
+                            <div class="p-2 rounded-lg bg-blue-50 text-blue-600">
+                                <span class="material-symbols-outlined text-[22px]">pie_chart</span>
+                            </div>
+                        </div>
+                        <h3 id="summary-main-source" class="text-2xl font-bold text-gray-900 mb-2">--</h3>
+                        <div
+                            class="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2 py-1 text-xs font-bold text-blue-600">
+                            Chiếm 80% <span class="text-gray-400 font-medium ml-1">tổng thu</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Số giao dịch</p>
+                            <div class="p-2 rounded-lg bg-orange-50 text-orange-600">
+                                <span class="material-symbols-outlined text-[22px]">receipt_long</span>
+                            </div>
+                        </div>
+                        <h3 id="summary-count" class="text-2xl font-bold text-gray-900 mb-2">0</h3>
+                        <div
+                            class="inline-flex items-center gap-1 rounded-md bg-orange-50 px-2 py-1 text-xs font-bold text-orange-600">
+                            +2 <span class="text-gray-400 font-medium ml-1">giao dịch mới</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-white shadow-sm border border-gray-100">
+
+                    <div class="p-5 flex flex-col lg:flex-row gap-4 justify-between border-b border-gray-100">
+
+                        <div class="relative w-full lg:w-96">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-gray-400 text-[20px]">search</span>
+                            </div>
+                            <input id="searchInput" type="text"
+                                class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:ring-0 text-sm font-medium transition-colors hover:bg-gray-100"
+                                placeholder="Tìm kiếm nguồn thu, số tiền...">
+                        </div>
+
+                        <div class="flex flex-wrap gap-3">
+
+                            <div class="relative">
+                                <button onclick="toggleMonthDropdown()"
+                                    class="group bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:border-primary transition-all flex items-center gap-3 min-w-[170px] justify-between cursor-pointer">
+                                    <div class="flex items-center gap-2 pointer-events-none">
+                                        <span
+                                            class="material-symbols-outlined text-[20px] text-gray-400">calendar_today</span>
+                                        <span id="selected-month">Tháng 12/2025</span>
+                                    </div>
+                                    <span id="month-arrow"
+                                        class="material-symbols-outlined text-[20px] text-gray-400 transition-transform duration-300">expand_more</span>
+                                </button>
+
+                                <div id="month-dropdown"
+                                    class="hidden absolute left-0 mt-2 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 z-50 origin-top-left max-h-80 overflow-y-auto">
+                                    <div
+                                        class="px-4 py-2 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider border-b border-gray-50 mb-1">
+                                        Chọn tháng</div>
+                                    <div id="month-options"></div>
+                                </div>
+                            </div>
+
+                            <div class="relative">
+                                <button onclick="toggleCategoryDropdown()"
+                                    class="group bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:border-primary transition-all flex items-center gap-3 min-w-[200px] justify-between cursor-pointer">
+                                    <div class="flex items-center gap-2 pointer-events-none">
+                                        <span
+                                            class="material-symbols-outlined text-[20px] text-gray-400">category</span>
+                                        <span id="selected-category-text">Tất cả nguồn thu</span>
+                                    </div>
+                                    <span id="category-arrow"
+                                        class="material-symbols-outlined text-[20px] text-gray-400 transition-transform duration-300">expand_more</span>
+                                </button>
+
+                                <div id="category-dropdown"
+                                    class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 z-50 origin-top-right max-h-80 overflow-y-auto">
+                                    <div
+                                        class="px-4 py-2 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider border-b border-gray-50 mb-1">
+                                        Lọc theo nguồn thu</div>
+                                    <div id="category-options"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr>
+                                    <th class="p-5 w-12 text-center">
+                                        <input type="checkbox"
+                                            class="w-5 h-5 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer">
+                                    </th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Ngày</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Mô tả</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Nguồn thu
+                                    </th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">
+                                        Số tiền</th>
+                                    <th
+                                        class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider text-center">
+                                        Loại</th>
+                                    <th class="p-5 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">
+                                        Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionTableBody" class="divide-y divide-gray-50">
+                                <tr class="hover:bg-gray-50/80 transition-colors group">
+                                    <td class="p-5 text-center"><input type="checkbox"
+                                            class="w-5 h-5 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500 cursor-pointer">
+                                    </td>
+                                    <td class="p-5 text-sm text-gray-600 font-medium">25/10/2023</td>
+                                    <td class="p-5 text-sm text-gray-900 font-semibold">Lương tháng 10</td>
+                                    <td class="p-5">
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                                            <span class="material-symbols-outlined text-[16px]">payments</span> Lương
+                                        </span>
+                                    </td>
+                                    <td class="p-5 text-sm font-bold text-right text-emerald-600">+25.000.000 ₫</td>
+                                    <td class="p-5 text-center">
+                                        <div
+                                            class="w-6 h-6 mx-auto rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                        </div>
+                                    </td>
+                                    <td class="p-5 text-right">
+                                        <div
+                                            class="flex justify-end gap-2 text-gray-400 opacity-60 group-hover:opacity-100 transition-opacity">
+                                            <button class="hover:text-emerald-600 transition-colors"><span
+                                                    class="material-symbols-outlined text-[20px]">edit</span></button>
+                                            <button class="hover:text-red-500 transition-colors"><span
+                                                    class="material-symbols-outlined text-[20px]">delete</span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="pagination-container"
+                        class="p-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <p class="text-xs font-medium text-gray-500">Hiển thị <span
+                                class="font-bold text-gray-900">0</span> đến <span
+                                class="font-bold text-gray-900">0</span> trong số <span
+                                class="font-bold text-gray-900">0</span> giao dịch</p>
+                        <div class="flex items-center gap-1">
+                            <!-- Pagination buttons will be rendered by JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { loadHeader } from '../../src/js/headerLoader.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeader('../../src/components/header.html');
+        });
+    </script>
+    <script type="module" src="../../src/js/logout.js"></script>
+    <script type="module" src="../../src/js/income.js"></script>
+</body>
+
+</html>

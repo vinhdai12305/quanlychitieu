@@ -1,0 +1,381 @@
+/* ================================================= */
+/* 1. IMPORT FONT & GLOBAL SETTINGS                  */
+/* ================================================= */
+/* Import cả Manrope (cũ) và Inter (mới - cho số liệu) */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Cấu hình chung */
+body {
+    font-family: 'Manrope', sans-serif;
+    background-color: #f8f9fa;
+    color: #111827;
+}
+
+/* ================================================= */
+/* 2. FIX LỖI & COMPONENTS CƠ BẢN                   */
+/* ================================================= */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+.material-symbols-outlined,
+.material-symbols-rounded {
+    vertical-align: middle;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.active .material-symbols-rounded,
+.active .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+}
+
+/* Scrollbar đẹp */
+.overflow-x-auto::-webkit-scrollbar,
+::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Effects */
+.card-hover {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.new-row {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* ================================================= */
+/* 3. CLASS ĐỒNG BỘ SỐ LIỆU (QUAN TRỌNG NHẤT)        */
+/* ================================================= */
+.number-style-report {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 28px !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    line-height: 1.2 !important;
+}
+
+/* ================================================= */
+/* 4. REPORT & DASHBOARD STYLES (Merged)             */
+/* ================================================= */
+
+:root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --primary: #10b981;
+    /* Emerald */
+    --danger: #ef4444;
+    --info: #3b82f6;
+    --text: #1e293b;
+    --text-light: #64748b;
+}
+
+/* Note: Body background is already set in Global Settings, but report specifically requests variable-based bg. 
+   We will keep specific classes below. */
+
+/* Container chính */
+.dashboard-container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+/* Các thành phần Grid & Card */
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.report-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.styled-select {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    background: white;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.stat-card,
+.main-chart-card,
+.sub-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.stat-card h2 {
+    margin: 10px 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.stat-card p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.main-chart-card {
+    margin-top: 25px;
+}
+
+.chart-wrapper {
+    height: 350px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+/* Progress & List Styles */
+.cat-item {
+    margin-top: 20px;
+}
+
+.cat-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.progress {
+    background: #f1f5f9;
+    height: 10px;
+    border-radius: 10px;
+}
+
+.bar {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.bar.blue {
+    background: var(--info);
+}
+
+.bar.yellow {
+    background: #f5a623;
+}
+
+.dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.dot.blue {
+    background: var(--info);
+}
+
+.dot.yellow {
+    background: #f5a623;
+}
+
+.transaction {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.transaction:last-child {
+    border-bottom: none;
+}
+
+.tx-icon {
+    background: #f1f5f9;
+    padding: 10px;
+    border-radius: 12px;
+    margin-right: 15px;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+/* Added color for icon visibility */
+.tx-details strong {
+    display: block;
+    font-size: 14px;
+}
+
+.tx-details span {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.tx-amount {
+    margin-left: auto;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tx-amount.negative {
+    color: var(--text);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .stats-grid,
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- POPUP (MODAL - Legacy for Report Page) --- */
+/* Note: Consider migrating to the new global transaction-modal if possible, but keeping this for now to avoid breaking report logic. */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.2s;
+}
+
+.btn-submit:hover {
+    opacity: 0.9;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}

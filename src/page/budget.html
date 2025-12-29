@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Ngân sách - Money Keeper</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7MQX3Z2ZWL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-7MQX3Z2ZWL');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
+        rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../src/css/style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { "primary": "#10b981", "primary-hover": "#059669", "dark": "#111827", "bg-main": "#f3f4f6" },
+                    fontFamily: { "body": ["Manrope", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="text-dark bg-bg-main font-body">
+
+    <div id="header-container" class="sticky top-0 z-50"></div>
+
+    <main class="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
+
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+            <div>
+                <h1 id="page-title" class="text-3xl md:text-4xl font-extrabold mb-2 text-gray-900 tracking-tight">Ngân
+                    sách Tháng 12
+                </h1>
+                <p class="text-gray-500 font-medium">Theo dõi chi tiêu và đảm bảo bạn đang đi đúng hướng.</p>
+            </div>
+
+            <div class="flex gap-3 relative z-30">
+                <div class="relative">
+                    <button onclick="toggleDropdown()"
+                        class="group bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:border-primary transition-all flex items-center gap-3 min-w-[170px] justify-between cursor-pointer">
+                        <div class="flex items-center gap-2 pointer-events-none">
+                            <span class="material-symbols-rounded text-[20px] text-gray-400">calendar_month</span>
+                            <span id="selected-time">Tháng 12/2025</span>
+                        </div>
+                        <span id="time-arrow"
+                            class="material-symbols-rounded text-[20px] text-gray-400 transition-transform duration-300">expand_more</span>
+                    </button>
+
+                    <div id="time-dropdown"
+                        class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 z-50 origin-top-right max-h-80 overflow-y-auto">
+                        <div
+                            class="px-4 py-2 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider border-b border-gray-50 mb-1">
+                            Chọn tháng</div>
+                        <!-- Options will be populated by JavaScript -->
+                        <div id="month-options"></div>
+                    </div>
+                </div>
+
+                <button onclick="toggleModal()"
+                    class="bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">
+                    <span class="material-symbols-rounded text-[20px]">add_circle</span>
+                    Tạo ngân sách
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                            <span class="material-symbols-rounded">account_balance_wallet</span>
+                        </div>
+                        <span class="text-xs font-bold uppercase text-gray-500">Tổng ngân sách</span>
+                    </div>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-lg text-xs font-bold">+25%</span>
+                </div>
+                <div class="number-style-report">15.000.000 ₫</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-600">
+                            <span class="material-symbols-rounded">shopping_bag</span>
+                        </div>
+                        <span class="text-xs font-bold uppercase text-gray-500">Đã chi tiêu</span>
+                    </div>
+                    <span class="bg-orange-50 text-orange-700 px-2 py-1 rounded-lg text-xs font-bold">+12%</span>
+                </div>
+                <div class="number-style-report mb-2">8.450.000 ₫</div>
+                <div class="w-full bg-gray-100 rounded-full h-2">
+                    <div class="bg-orange-500 h-2 rounded-full" style="width: 56%"></div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <span class="material-symbols-rounded">savings</span>
+                        </div>
+                        <span class="text-xs font-bold uppercase text-gray-500">Còn lại</span>
+                    </div>
+                    <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg text-xs font-bold">An toàn</span>
+                </div>
+                <div class="number-style-report">6.550.000 ₫</div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div class="flex gap-2 bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm">
+                <button onclick="filterData('all', this)"
+                    class="filter-btn px-4 py-1.5 rounded-lg text-sm font-bold transition-all bg-emerald-500 text-white">Tất
+                    cả</button>
+                <button onclick="filterData('warning', this)"
+                    class="filter-btn px-4 py-1.5 text-gray-500 hover:bg-gray-100 rounded-lg text-sm font-semibold transition-all">Đang
+                    báo động</button>
+                <button onclick="filterData('danger', this)"
+                    class="filter-btn px-4 py-1.5 text-gray-500 hover:bg-gray-100 rounded-lg text-sm font-semibold transition-all">Đã
+                    vượt quá</button>
+            </div>
+        </div>
+
+        <div id="budget-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20"></div>
+
+    </main>
+
+    <div id="add-modal" class="fixed inset-0 z-50 hidden transition-opacity duration-300">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onclick="toggleModal()"></div>
+
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div
+                class="bg-white rounded-[32px] w-full max-w-xl p-8 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] modal-animate pointer-events-auto relative">
+
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-gray-900 leading-tight">Thêm Ngân sách</h3>
+                        <p class="text-gray-500 text-sm font-medium mt-1">Lên kế hoạch chi tiêu cho tháng này</p>
+                    </div>
+                    <button onclick="toggleModal()"
+                        class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                        <span class="material-symbols-rounded text-[24px]">close</span>
+                    </button>
+                </div>
+
+                <form id="add-budget-form">
+                    <div class="space-y-6">
+                        <div class="group">
+                            <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Tên
+                                danh mục</label>
+                            <input id="inp-name" type="text"
+                                class="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-emerald-500/10 outline-none font-bold text-gray-900 placeholder-gray-400 text-lg transition-all"
+                                placeholder="Ví dụ: Mua sắm quần áo" required>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Hạn
+                                    mức (VNĐ)</label>
+                                <input id="inp-limit" type="number"
+                                    class="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:border-primary focus:ring-4 focus:ring-emerald-500/10 outline-none font-bold text-gray-900 placeholder-gray-400 text-lg transition-all"
+                                    placeholder="0" required>
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider ml-1">Danh
+                                    mục chi tiêu</label>
+                                <div class="relative">
+                                    <select id="inp-category"
+                                        class="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:border-primary outline-none font-bold text-gray-900 appearance-none cursor-pointer text-lg transition-all"
+                                        required>
+                                        <option value="Ăn uống">🍔 Ăn uống</option>
+                                        <option value="Di chuyển">🚗 Di chuyển</option>
+                                        <option value="Mua sắm">🛍️ Mua sắm</option>
+                                        <option value="Giải trí">🎮 Giải trí</option>
+                                        <option value="Hóa đơn">⚡ Hóa đơn</option>
+                                        <option value="Sức khỏe">💊 Sức khỏe</option>
+                                        <option value="Giáo dục">📚 Giáo dục</option>
+                                        <option value="Du lịch">✈️ Du lịch</option>
+                                        <option value="Chi tiêu khác">📦 Khác</option>
+                                    </select>
+                                    <span
+                                        class="material-symbols-rounded absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">expand_more</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-4 bg-primary text-white rounded-2xl font-bold text-xl shadow-xl shadow-emerald-200 hover:bg-primary-hover hover:-translate-y-0.5 mt-2 transition-all active:scale-95 flex items-center justify-center gap-3">
+                            <span class="material-symbols-rounded">check_circle</span>
+                            Xác nhận tạo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { loadHeader } from '../../src/js/headerLoader.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeader('../../src/components/header.html');
+        });
+    </script>
+    <script type="module" src="../../src/js/logout.js"></script>
+    <script type="module" src="../../src/js/budget.js"></script>
+</body>
+
+</html>

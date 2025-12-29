@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyKeeper - Báo cáo & Phân tích</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
+        rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Use default config to ensure compatibility with global modal styles
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+
+
+    <link rel="stylesheet" href="../../src/css/style.css">
+</head>
+
+<body>
+
+    <div id="header-container" class="sticky top-0 z-50"></div>
+
+    <div class="dashboard-container">
+
+        <header class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Phân tích tài chính</h1>
+            <div class="relative">
+                <button onclick="toggleMonthDropdown()"
+                    class="group bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:border-primary transition-all flex items-center gap-3 min-w-[170px] justify-between cursor-pointer">
+                    <div class="flex items-center gap-2 pointer-events-none">
+                        <span class="material-symbols-outlined text-[20px] text-gray-400">calendar_today</span>
+                        <span id="selected-month">Tháng 12/2025</span>
+                    </div>
+                    <span id="month-arrow"
+                        class="material-symbols-outlined text-[20px] text-gray-400 transition-transform duration-300">expand_more</span>
+                </button>
+
+                <div id="month-dropdown"
+                    class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 z-50 origin-top-right max-h-80 overflow-y-auto">
+                    <div
+                        class="px-4 py-2 text-[11px] font-extrabold text-gray-400 uppercase tracking-wider border-b border-gray-50 mb-1">
+                        Chọn tháng</div>
+                    <div id="month-options"></div>
+                </div>
+            </div>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">+ Thu nhập</span>
+                </div>
+                <p class="text-gray-500 text-sm font-medium">Tổng thu nhập</p>
+                <h3 id="incomeVal" class="number-style-report mt-1">0 ₫</h3>
+            </div>
+
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">- Chi tiêu</span>
+                </div>
+                <p class="text-gray-500 text-sm font-medium">Tổng chi tiêu</p>
+                <h3 id="expenseVal" class="number-style-report mt-1">0 ₫</h3>
+            </div>
+
+            <div class="stat-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">Hiện có</span>
+                </div>
+                <p class="text-gray-500 text-sm font-medium">Số dư khả dụng</p>
+                <h3 id="balanceVal" class="number-style-report mt-1">0 ₫</h3>
+            </div>
+        </section>
+
+        <section class="main-chart-card">
+            <div class="report-header" style="margin-bottom: 0;">
+                <h3 style="font-size: 1.2rem; margin: 0;">Dòng tiền</h3>
+                <p style="margin: 0; font-size: 0.9rem; color: #64748b;">Thu nhập vs Chi tiêu <span
+                        id="periodLabel">...</span></p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="flowChart"></canvas>
+            </div>
+        </section>
+
+        <div class="bottom-grid">
+            <div class="sub-card">
+                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Phân loại Chi tiêu</h3>
+                <div class="cat-list"></div>
+            </div>
+            <div class="sub-card">
+                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Giao dịch gần đây</h3>
+                <div class="tx-list"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="module">
+        import { getMonthlyStats } from '../../src/firebase/firestore.service.js';
+        import { checkAuth } from '../../src/firebase/auth.js';
+        import { normalizeCategory, getCategoryInfo } from '../../src/js/categoryUtils.js';
+        import { formatCurrency, getExchangeRate } from '../../src/services/currencyService.js';
+
+        let myChart;
+        let selectedMonth = new Date().getMonth() + 1;
+        let selectedYear = new Date().getFullYear();
+        let currentRate = null; // Cached exchange rate
+
+        // Helper to get current currency code
+        function getCurrentCurrencyCode() {
+            return localStorage.getItem('moneykeeper_currency') || 'VND';
+        }
+
+        // Helper: Convert VND to selected currency for charts
+        function convertAmount(amountVND) {
+            const currency = getCurrentCurrencyCode();
+            if (currency === 'USD' && currentRate) {
+                return amountVND / currentRate;
+            }
+            return amountVND;
+        }
+
+
+        // --- POPULATE MONTH FILTER (Custom Dropdown) ---
+        function populateMonthFilter() {
+            const container = document.getElementById('month-options');
+            if (!container) return;
+
+            const today = new Date();
+            const currentMonth = today.getMonth() + 1;
+            const currentYear = today.getFullYear();
+
+            let html = '';
+            for (let i = 0; i < 12; i++) {
+                let month = currentMonth - i;
+                let year = currentYear;
+
+                if (month <= 0) {
+                    month += 12;
+                    year -= 1;
+                }
+
+                const isActive = month === selectedMonth && year === selectedYear;
+
+                html += `
+                <div onclick="selectMonth(${month}, ${year})"
+                    class="month-item px-4 py-2.5 text-sm cursor-pointer flex justify-between items-center ${isActive ? 'bg-emerald-50 text-emerald-600 font-bold' : 'hover:bg-emerald-50 hover:text-emerald-600 font-medium'}">
+                    <span>Tháng ${month}/${year}</span>
+                    ${isActive ? '<span class="material-symbols-outlined text-[18px]">check</span>' : ''}
+                </div>`;
+            }
+
+            container.innerHTML = html;
+            updateSelectedMonthText();
+        }
+
+        // Update selected month text display
+        function updateSelectedMonthText() {
+            const el = document.getElementById('selected-month');
+            if (el) {
+                el.textContent = `Tháng ${selectedMonth}/${selectedYear}`;
+            }
+        }
+
+        // Toggle month dropdown - Export to window
+        window.toggleMonthDropdown = function () {
+            const dropdown = document.getElementById('month-dropdown');
+            const arrow = document.getElementById('month-arrow');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+                if (arrow) {
+                    arrow.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+                }
+            }
+        };
+
+        // Select month from dropdown - Export to window
+        window.selectMonth = function (month, year) {
+            selectedMonth = month;
+            selectedYear = year;
+
+            updateSelectedMonthText();
+            populateMonthFilter();
+
+            // Close dropdown
+            const dropdown = document.getElementById('month-dropdown');
+            const arrow = document.getElementById('month-arrow');
+            if (dropdown) {
+                dropdown.classList.add('hidden');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+
+            // Reload data
+            loadData();
+        };
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            const dropdown = document.getElementById('month-dropdown');
+            const button = e.target.closest('button[onclick="toggleMonthDropdown()"]');
+            if (!button && dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+                const arrow = document.getElementById('month-arrow');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // --- SETUP CHART ---
+        function initChart() {
+            const ctx = document.getElementById('flowChart').getContext('2d');
+            const greenGradient = ctx.createLinearGradient(0, 0, 0, 300);
+            greenGradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+            greenGradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Thu nhập', data: [], borderColor: '#10b981', backgroundColor: greenGradient, fill: true, tension: 0.4
+                    }, {
+                        label: 'Chi tiêu', data: [], borderColor: '#ef4444', fill: false, tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    },
+                    scales: { y: { display: false }, x: { grid: { display: false } } },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const currency = getCurrentCurrencyCode();
+                                    const isUSD = currency === 'USD';
+                                    const val = context.raw;
+
+                                    // Convert back to VND for passing to formatCurrency
+                                    const vndValue = isUSD ? val * currentRate : val;
+                                    return context.dataset.label + ': ' + formatCurrency(vndValue, null, currentRate);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- FETCH & PROCESS DATA ---
+        async function loadData() {
+            const user = await checkAuth(false);
+            if (!user) return;
+
+            // Pre-load exchange rate for currency formatting
+            currentRate = await getExchangeRate();
+
+            const monthStr = String(selectedMonth).padStart(2, '0');
+
+            // Update Labels
+            document.getElementById('periodLabel').innerText = `tháng ${monthStr}/${selectedYear}`;
+
+            try {
+                const data = await getMonthlyStats(selectedMonth, selectedYear);
+
+                // Update Stats (sử dụng formatCurrency để hỗ trợ VND/USD)
+                document.getElementById('incomeVal').innerText = formatCurrency(data.totalIncome, null, currentRate);
+                document.getElementById('expenseVal').innerText = formatCurrency(data.totalExpense, null, currentRate);
+                document.getElementById('balanceVal').innerText = formatCurrency(data.balance, null, currentRate);
+
+                // Build daily data
+                const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+                const incomeByDay = Array(daysInMonth).fill(0);
+                const expenseByDay = Array(daysInMonth).fill(0);
+
+                data.transactions.forEach(t => {
+                    const day = parseInt(t.date.split('-')[2]) - 1;
+                    if (t.type === 'income') incomeByDay[day] += t.amount;
+                    else expenseByDay[day] += t.amount;
+                });
+
+                // Update chart
+                myChart.data.labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+                myChart.data.datasets[0].data = incomeByDay.map(v => convertAmount(v));
+                myChart.data.datasets[1].data = expenseByDay.map(v => convertAmount(v));
+                myChart.update();
+
+                // Render Categories & Transactions
+                renderCategories(data.transactions, data.totalExpense);
+                renderTransactions(data.transactions);
+
+            } catch (error) {
+                console.error("Error loading report data:", error);
+            }
+        }
+
+        function renderCategories(txs, total) {
+            const container = document.querySelector('.cat-list'); container.innerHTML = '';
+            if (total === 0) { container.innerHTML = '<p style="color:#999; text-align:center; padding: 20px;">Chưa có chi tiêu</p>'; return; }
+
+            // Sử dụng categoryUtils để chuẩn hóa và nhóm theo category
+            const sums = {};
+            txs.filter(t => t.type === 'expense').forEach(t => {
+                const normalizedName = normalizeCategory(t.category, 'expense');
+                const categoryInfo = getCategoryInfo(t.category, 'expense');
+                if (!sums[normalizedName]) {
+                    sums[normalizedName] = { amount: 0, color: categoryInfo.color };
+                }
+                sums[normalizedName].amount += t.amount;
+            });
+
+            Object.entries(sums).sort((a, b) => b[1].amount - a[1].amount).forEach(([name, data]) => {
+                const pct = Math.round((data.amount / total) * 100);
+                const hexColor = data.color;
+
+                container.innerHTML += `
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-1 text-sm">
+                            <span class="flex items-center gap-2 font-medium text-slate-700">
+                                <span class="w-2 h-2 rounded-full" style="background-color: ${hexColor}"></span> ${name}
+                            </span>
+                            <span class="text-slate-500 font-medium">${formatCurrency(data.amount, null, currentRate)} <b class="text-slate-800 ml-1">${pct}%</b></span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="h-full rounded-full" style="width: ${pct}%; background-color: ${hexColor}"></div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function renderTransactions(txs) {
+            const container = document.querySelector('.tx-list'); container.innerHTML = '';
+            if (txs.length === 0) container.innerHTML = '<p style="color:#999; text-align:center; padding: 20px;">Chưa có giao dịch</p>';
+
+            txs.slice(0, 5).forEach(t => {
+                const isExp = t.type !== 'income';
+                const dateParts = t.date.split('-');
+                const displayDate = `${dateParts[2]}/${dateParts[1]}`;
+                const amountClass = isExp ? 'text-red-500' : 'text-green-500';
+                const sign = isExp ? '-' : '+';
+
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-3 mb-2 bg-slate-50 rounded-lg last:mb-0 hover:bg-slate-100 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-lg shadow-sm">
+                                ${isExp ? '🛒' : '💰'}
+                            </div>
+                            <div class="flex flex-col">
+                                <strong class="text-sm text-slate-700 font-semibold">${t.note || t.category}</strong>
+                                <span class="text-xs text-slate-400 font-medium">${displayDate}</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-sm ${amountClass}">${sign} ${formatCurrency(t.amount, null, currentRate)}</span>
+                    </div>`;
+            });
+        }
+
+        // --- INITIALIZE ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            populateMonthFilter();
+            initChart();
+            await loadData();
+        });
+    </script>
+
+
+    <script type="module">
+        import { loadHeader } from '../../src/js/headerLoader.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeader('../../src/components/header.html');
+        });
+    </script>
+    <script type="module" src="../../src/js/logout.js"></script>
+</body>
+
+</html>
