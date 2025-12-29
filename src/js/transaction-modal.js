@@ -214,10 +214,8 @@ function setupModalEvents() {
                 closeModal();
                 form.reset();
 
-                // Reset date
-                if (dateInput) dateInput.valueAsDate = new Date();
-                // Reset tab
-                if (defaultTab) defaultTab.click();
+                // Reload page to update data table
+                window.location.reload();
             } else {
                 alert('❌ Lỗi: ' + result.error);
             }
