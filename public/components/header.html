@@ -56,6 +56,36 @@
   </div>
 </nav>
 
+<!-- Logout Confirm Modal -->
+<div id="logout-modal" class="fixed inset-0 z-[100] hidden transition-opacity duration-300">
+  <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onclick="closeLogoutModal()"></div>
+
+  <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+    <div
+      class="bg-white rounded-[28px] w-full max-w-md p-8 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] pointer-events-auto text-center transform transition-all">
+
+      <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-[32px] text-orange-500">logout</span>
+      </div>
+
+      <h3 class="text-2xl font-extrabold text-gray-900 mb-2">Đăng xuất?</h3>
+      <p class="text-gray-500 font-medium mb-8">Bạn có chắc chắn muốn đăng xuất khỏi tài khoản?</p>
+
+      <div class="flex gap-4">
+        <button onclick="closeLogoutModal()"
+          class="flex-1 py-3.5 px-6 bg-gray-100 text-gray-700 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all cursor-pointer">
+          Hủy
+        </button>
+        <button id="confirmLogoutBtn"
+          class="flex-1 py-3.5 px-6 bg-orange-500 text-white rounded-xl font-bold text-lg hover:bg-orange-600 transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          Đăng xuất
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
   /* Reset & Base */
   * {

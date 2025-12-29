@@ -15,7 +15,7 @@ function initLogout() {
     console.log('👤 Current user:', user.email);
   }
 
-  // Gắn sự kiện logout
+  // Gắn sự kiện logout button -> mở modal
   const logoutBtn = document.getElementById('logoutBtn');
 
   if (logoutBtn) {
@@ -25,36 +25,11 @@ function initLogout() {
     const newBtn = logoutBtn.cloneNode(true);
     logoutBtn.parentNode.replaceChild(newBtn, logoutBtn);
 
-    newBtn.addEventListener('click', async function (e) {
+    newBtn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-
-      console.log('🔴 Logout button clicked');
-
-      if (confirm('Bạn có chắc muốn đăng xuất?')) {
-        try {
-          // Disable button
-          newBtn.disabled = true;
-          newBtn.innerHTML = '<span class="material-symbols-outlined">progress_activity</span> Đang đăng xuất...';
-
-          console.log('⏳ Calling logout function...');
-
-          // Gọi logout
-          await logout();
-
-          console.log('✅ Logout completed');
-
-        } catch (error) {
-          console.error('❌ Logout error:', error);
-          alert('Có lỗi xảy ra khi đăng xuất!');
-
-          // Khôi phục button
-          newBtn.disabled = false;
-          newBtn.innerHTML = '<span class="material-symbols-outlined">logout</span> Đăng xuất';
-        }
-      } else {
-        console.log('❌ User cancelled logout');
-      }
+      console.log('🔴 Logout button clicked - showing modal');
+      showLogoutModal();
     });
   } else {
     console.warn('⚠️ Logout button NOT found yet, will retry...');
@@ -65,6 +40,59 @@ function initLogout() {
         initLogout();
       }
     }, 500);
+  }
+
+  // Setup confirm logout button
+  setupConfirmLogout();
+}
+
+// Show logout modal
+function showLogoutModal() {
+  const modal = document.getElementById('logout-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+  }
+}
+
+// Close logout modal - expose to window for onclick
+window.closeLogoutModal = function () {
+  const modal = document.getElementById('logout-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+};
+
+// Setup confirm logout button
+function setupConfirmLogout() {
+  const confirmBtn = document.getElementById('confirmLogoutBtn');
+  if (confirmBtn && !confirmBtn.hasAttribute('data-initialized')) {
+    confirmBtn.setAttribute('data-initialized', 'true');
+
+    confirmBtn.addEventListener('click', async function () {
+      try {
+        // Disable button
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span> Đang đăng xuất...';
+
+        console.log('⏳ Calling logout function...');
+
+        // Gọi logout
+        await logout();
+
+        console.log('✅ Logout completed');
+
+      } catch (error) {
+        console.error('❌ Logout error:', error);
+        alert('Có lỗi xảy ra khi đăng xuất!');
+
+        // Khôi phục button
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">logout</span> Đăng xuất';
+
+        // Close modal
+        closeLogoutModal();
+      }
+    });
   }
 }
 
