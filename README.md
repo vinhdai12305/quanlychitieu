@@ -353,8 +353,8 @@ Dự án được thực hiện bởi sự đóng góp nhiệt huyết của cá
 
 | Thành viên | Tỷ lệ | Vai trò chính |
 |------------|-------|---------------|
-| **Hoàng Tùng** | ~25% | Backend Lead + Core + Deploy |
-| **Huy Bảo** | ~15% | DevOps & Visualization |
+| **Hoàng Tùng** | ~23% | Backend Lead + Core + Deploy |
+| **Huy Bảo** | ~17% | DevOps & Visualization |
 | **Quang Hân** | ~15% | Core Feature Transaction |
 | **Vĩnh Đại** | ~15% | UI Lead |
 | **Thành An** | ~15% | Budget Module |
