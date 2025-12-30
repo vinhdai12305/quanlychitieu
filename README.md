@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <strong> Được phát triển bởi : |Hoàng Tùng|Huy Bảo|Vĩnh Đại|Quang Hân|Thành An|Tuấn Bảo|
+  <strong> Được phát triển bởi : | Hoàng Tùng | Huy Bảo | Vĩnh Đại | Quang Hân | Thành An | Tuấn Bảo |
 </p>
 
 <p align="center">
