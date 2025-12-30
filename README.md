@@ -380,7 +380,7 @@ Dự án này là bước đệm quan trọng giúp các thành viên trong nhó
 
 ### 🙏 Lời cảm ơn
 
-Chúng em xin gửi lời cảm ơn chân thành nhất đến **Anh Hữu Quyền** - người thầy, người hướng dẫn đã luôn đồng hành, hỗ trợ và chỉ dạy tận tình trong suốt quá trình thực hiện dự án. Nhờ có sự hướng dẫn của anh, chúng em đã vượt qua nhiều khó khăn, thử thách và hoàn thiện được sản phẩm Money Keeper như ngày hôm nay.
+Chúng em xin gửi lời cảm ơn chân thành nhất đến anh **Hữu Quyền** - người thầy, người hướng dẫn đã luôn đồng hành, hỗ trợ và chỉ dạy tận tình trong suốt quá trình thực hiện dự án. Nhờ có sự hướng dẫn của anh, chúng em đã vượt qua nhiều khó khăn, thử thách và hoàn thiện được sản phẩm Money Keeper như ngày hôm nay.
 
 > *"Thành công không đến từ việc làm một mình, mà đến từ sự hợp tác và hướng dẫn của những người đi trước."*
 
