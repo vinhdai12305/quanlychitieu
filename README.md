@@ -51,13 +51,13 @@ Xây dựng một ứng dụng web quản lý chi tiêu cá nhân hoàn chỉnh,
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        MONEY KEEPER                              │
+│                        MONEY KEEPER                             │
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
 │  │   Xác thực  │  │  Dashboard  │  │  Giao dịch  │              │
 │  │  (Auth)     │  │ (Tổng quan) │  │ (Thu/Chi)   │              │
 │  └─────────────┘  └─────────────┘  └─────────────┘              │
-│                                                                  │
+│                                                                 │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
 │  │  Ngân sách  │  │   Báo cáo   │  │   Cài đặt   │              │
 │  │  (Budget)   │  │  (Report)   │  │  (Settings) │              │
@@ -353,8 +353,8 @@ Dự án được thực hiện bởi sự đóng góp nhiệt huyết của cá
 
 | Thành viên | Tỷ lệ | Vai trò chính |
 |------------|-------|---------------|
-| **Hoàng Tùng** | ~25% | Backend Lead + Core + Deploy |
-| **Huy Bảo** | ~15% | DevOps & Visualization |
+| **Hoàng Tùng** | ~23% | Backend Lead + Core + Deploy |
+| **Huy Bảo** | ~17% | DevOps & Visualization |
 | **Quang Hân** | ~15% | Core Feature Transaction |
 | **Vĩnh Đại** | ~15% | UI Lead |
 | **Thành An** | ~15% | Budget Module |
@@ -380,7 +380,7 @@ Dự án này là bước đệm quan trọng giúp các thành viên trong nhó
 
 ### 🙏 Lời cảm ơn
 
-Chúng em xin gửi lời cảm ơn chân thành nhất đến anh Quyền là người thầy, người hướng dẫn đã luôn đồng hành, hỗ trợ và chỉ dạy tận tình trong suốt quá trình thực hiện dự án. Nhờ có sự hướng dẫn của anh, chúng em đã vượt qua nhiều khó khăn, thử thách và hoàn thiện được sản phẩm Money Keeper như ngày hôm nay.
+Chúng em xin gửi lời cảm ơn chân thành nhất đến anh ** Hữu Quyền ** là người thầy, người hướng dẫn đã luôn đồng hành, hỗ trợ và chỉ dạy tận tình trong suốt quá trình thực hiện dự án. Nhờ có sự hướng dẫn của anh, chúng em đã vượt qua nhiều khó khăn, thử thách và hoàn thiện được sản phẩm Money Keeper như ngày hôm nay.
 
 > *"Thành công không đến từ việc làm một mình, mà đến từ sự hợp tác và hướng dẫn của những người đi trước."*
 
