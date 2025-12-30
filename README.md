@@ -3,7 +3,10 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Version-1.0.0-green?style=for-the-badge" alt="Version"/>
   <img src="https://img.shields.io/badge/Status-Production-blue?style=for-the-badge" alt="Status"/>
-  <img src="https://img.shields.io/badge/License-ISC-yellow?style=for-the-badge" alt="License"/>
+</p>
+
+<p align="center">
+  <strong> Được phát triển bởi : **Hoàng Tùng**|**Huy Bảo**|**Vĩnh Đại**|**Quang Hân**|**Thành An**|**Tuấn Bảo**|
 </p>
 
 <p align="center">
@@ -386,12 +389,6 @@ Chúng em xin gửi lời cảm ơn chân thành nhất đến anh ** Hữu Quy
 > *"Thành công không đến từ việc làm một mình, mà đến từ sự hợp tác và hướng dẫn của những người đi trước."*
 
 Cảm ơn anh đã tin tưởng và tạo điều kiện để chúng em phát triển! 
-
----
-
-## �📄 License
-
-Dự án được phân phối dưới giấy phép **ISC License**.
 
 ---
 
