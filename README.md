@@ -289,6 +289,7 @@ quanlychitieu/
 | **Bảo mật** | ⭐⭐⭐⭐ | Xác thực Firebase, phân quyền dữ liệu |
 | **Hiệu năng** | ⭐⭐⭐⭐ | Load nhanh, realtime sync |
 | **Code quality** | ⭐⭐⭐⭐ | Modular, sử dụng design patterns |
+<img width="1854" height="900" alt="image" src="https://github.com/user-attachments/assets/930a9eed-09dd-402c-be8b-d8a6cd368531" />
 
 ### Điểm mạnh 💪
 
